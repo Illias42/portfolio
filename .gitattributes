@@ -1,0 +1,5 @@
+* text=auto eol=lf
+bun.lock linguist-generated=true
+*.glb filter=lfs diff=lfs merge=lfs -text
+*.hdr filter=lfs diff=lfs merge=lfs -text
+*.ktx2 filter=lfs diff=lfs merge=lfs -text

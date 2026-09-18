@@ -1,0 +1,331 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "nextjs", "jsx-a11y", "import", "unicorn", "promise", "oxc"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2024": true
+  },
+  "settings": {
+    "next": {
+      "rootDir": "."
+    },
+    "react": {
+      "version": "19"
+    }
+  },
+  "options": {
+    "typeAware": true
+  },
+  "ignorePatterns": [
+    ".next",
+    "out",
+    "node_modules",
+    "public",
+    ".claude/worktrees",
+    "next-env.d.ts"
+  ],
+  "rules": {
+    "no-console": [
+      "warn",
+      {
+        "allow": ["warn", "error"]
+      }
+    ],
+    "eqeqeq": [
+      "error",
+      "always",
+      {
+        "null": "ignore"
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "framer-motion",
+            "message": "Use `motion/react` (the `motion` package) instead of framer-motion."
+          }
+        ],
+        "patterns": [
+          {
+            "group": ["three/examples/jsm/*", "three/examples/jsm/**"],
+            "message": "Import from `three/addons/*` or use @react-three/drei helpers."
+          },
+          {
+            "group": [
+              "@/entities/*/*",
+              "@/entities/*/*/**",
+              "!@/entities/*/@x/*",
+              "@/features/*/*",
+              "@/features/*/*/**",
+              "@/widgets/*/*",
+              "@/widgets/*/*/**",
+              "@/_pages/*/*",
+              "@/_pages/*/*/**"
+            ],
+            "message": "FSD: import a slice only through its public API (`@/<layer>/<slice>`), never a deep path."
+          }
+        ]
+      }
+    ],
+    "typescript/consistent-type-imports": [
+      "error",
+      {
+        "fixStyle": "inline-type-imports"
+      }
+    ],
+    "typescript/no-explicit-any": "error",
+    "typescript/no-non-null-assertion": "warn",
+    "typescript/array-type": [
+      "warn",
+      {
+        "default": "array-simple"
+      }
+    ],
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/await-thenable": "error",
+    "typescript/switch-exhaustiveness-check": "error",
+    "typescript/prefer-nullish-coalescing": "warn",
+    "typescript/prefer-optional-chain": "warn",
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "react/jsx-no-useless-fragment": "warn",
+    "react/self-closing-comp": "warn",
+    "react/no-array-index-key": "warn",
+    "react/button-has-type": "error",
+    "react/jsx-boolean-value": ["warn", "never"],
+    "react/jsx-curly-brace-presence": [
+      "warn",
+      {
+        "props": "never",
+        "children": "never"
+      }
+    ],
+    "jsx-a11y/alt-text": "error",
+    "jsx-a11y/anchor-is-valid": "warn",
+    "nextjs/no-img-element": "error",
+    "nextjs/no-html-link-for-pages": "error",
+    "nextjs/no-async-client-component": "error",
+    "nextjs/no-sync-scripts": "error",
+    "nextjs/no-head-element": "error",
+    "nextjs/no-css-tags": "error",
+    "nextjs/google-font-display": "warn",
+    "nextjs/no-page-custom-font": "warn",
+    "import/no-cycle": "error",
+    "import/no-self-import": "error",
+    "import/no-duplicates": "warn",
+    "import/first": "warn",
+    "import/no-mutable-exports": "error",
+    "unicorn/filename-case": [
+      "error",
+      {
+        "case": "kebabCase"
+      }
+    ],
+    "unicorn/prefer-node-protocol": "error",
+    "unicorn/no-nested-ternary": "warn",
+    "promise/catch-or-return": "off",
+    "react/react-in-jsx-scope": "off",
+    "import/no-unassigned-import": [
+      "warn",
+      {
+        "allow": ["**/*.css"]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/**"],
+      "rules": {
+        "import/no-default-export": "error"
+      }
+    },
+    {
+      "files": ["src/shared/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@/entities",
+                  "@/entities/**",
+                  "@/features",
+                  "@/features/**",
+                  "@/widgets",
+                  "@/widgets/**",
+                  "@/_pages",
+                  "@/_pages/**",
+                  "@/_app",
+                  "@/_app/**"
+                ],
+                "message": "FSD: `shared` must not import from any other layer."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/entities/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@/features",
+                  "@/features/**",
+                  "@/widgets",
+                  "@/widgets/**",
+                  "@/_pages",
+                  "@/_pages/**",
+                  "@/_app",
+                  "@/_app/**"
+                ],
+                "message": "FSD: `entities` may import only from `shared` (and other entities via `@x`)."
+              },
+              {
+                "group": ["@/entities/*/*", "@/entities/*/*/**", "!@/entities/*/@x/*"],
+                "message": "FSD: cross-entity imports go through `@/entities/<slice>/@x/<consumer>`."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@/features",
+                  "@/features/**",
+                  "@/widgets",
+                  "@/widgets/**",
+                  "@/_pages",
+                  "@/_pages/**",
+                  "@/_app",
+                  "@/_app/**"
+                ],
+                "message": "FSD: `features` may import only from `entities` and `shared`; features never import each other."
+              },
+              {
+                "group": ["@/entities/*/*", "@/entities/*/*/**", "!@/entities/*/@x/*"],
+                "message": "FSD: import a slice only through its public API."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/widgets/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@/widgets",
+                  "@/widgets/**",
+                  "@/_pages",
+                  "@/_pages/**",
+                  "@/_app",
+                  "@/_app/**"
+                ],
+                "message": "FSD: `widgets` may import only from `features`, `entities` and `shared`; widgets never import each other."
+              },
+              {
+                "group": [
+                  "@/entities/*/*",
+                  "@/entities/*/*/**",
+                  "!@/entities/*/@x/*",
+                  "@/features/*/*",
+                  "@/features/*/*/**"
+                ],
+                "message": "FSD: import a slice only through its public API."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/_pages/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/_pages", "@/_pages/**", "@/_app", "@/_app/**"],
+                "message": "FSD: `_pages` may import only from `widgets`, `features`, `entities` and `shared`; pages never import each other."
+              },
+              {
+                "group": [
+                  "@/entities/*/*",
+                  "@/entities/*/*/**",
+                  "!@/entities/*/@x/*",
+                  "@/features/*/*",
+                  "@/features/*/*/**",
+                  "@/widgets/*/*",
+                  "@/widgets/*/*/**"
+                ],
+                "message": "FSD: import a slice only through its public API."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["app/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@/entities",
+                  "@/entities/**",
+                  "@/features",
+                  "@/features/**",
+                  "@/widgets",
+                  "@/widgets/**"
+                ],
+                "message": "Route files are thin: compose from `@/_pages/*`, wire providers/styles from `@/_app/*`, read config from `@/shared/*`."
+              },
+              {
+                "group": ["@/_pages/*/*", "@/_pages/*/*/**"],
+                "message": "FSD: import a page slice only through its public API."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/*.scene.tsx"],
+      "rules": {
+        "react/no-unknown-property": "off"
+      }
+    }
+  ]
+}
