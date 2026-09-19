@@ -2,16 +2,16 @@ import type { KnipConfig } from "knip";
 
 const config: KnipConfig = {
   entry: [
-    "app/**/*.{ts,tsx}",
+    "src/app/**/*.{ts,tsx}",
     "steiger.config.ts",
-    "shared/**/index.ts",
-    "_app/**/index.ts",
-    "widgets/*/index.ts",
+    "src/shared/**/index.ts",
+    "src/widgets/*/index.ts",
+    "public/fonts/index.ts",
   ],
   project: [
-    "app/**/*.{ts,tsx,css}",
-    "_app/**/*.{ts,tsx,css}",
-    "{widgets,features,entities,shared}/**/*.{ts,tsx,css}",
+    "src/app/**/*.{ts,tsx,css}",
+    "public/fonts/*.{ts,tsx}",
+    "src/{widgets,features,entities,shared}/**/*.{ts,tsx,css}",
   ],
   compilers: {
     css: (text: string) => [...text.matchAll(/(?<=@)import[^;]+/g)].join("\n"),
