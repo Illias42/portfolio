@@ -18,9 +18,28 @@
   --palette-coast: #98a9a5;
   --palette-sun-haze: #f4b83f29;
   --duration-micro: 240ms;
+  --duration-reveal: 700ms;
+  --palette-work-paper: #f3f0e8;
+  --palette-work-ink: #101615;
+  --palette-work-secondary: #5e6764;
+  --palette-water-highlight: #dde9e7;
+  --palette-water-aqua: #b8d8d4;
+  --palette-water-accent: #3c9991;
+  --palette-flag-black: #000000;
+  --palette-flag-red: #dd0000;
+  --palette-flag-gold: #ffcc00;
 }
 
 @theme inline {
+  --color-work-foreground: var(--palette-work-ink);
+  --color-work-secondary: var(--palette-work-secondary);
+  --color-work-background: var(--palette-work-paper);
+  --color-water-highlight: var(--palette-water-highlight);
+  --color-water-aqua: var(--palette-water-aqua);
+  --color-water-accent: var(--palette-water-accent);
+  --color-flag-black: var(--palette-flag-black);
+  --color-flag-red: var(--palette-flag-red);
+  --color-flag-gold: var(--palette-flag-gold);
   --color-background: var(--palette-paper);
   --color-foreground: var(--palette-ink);
   --color-muted: var(--palette-smoke);

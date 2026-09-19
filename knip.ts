@@ -16,7 +16,6 @@ const config: KnipConfig = {
   compilers: {
     css: (text: string) => [...text.matchAll(/(?<=@)import[^;]+/g)].join("\n"),
   },
-  ignoreDependencies: ["@react-three/drei", "@react-three/fiber", "three", "@types/three"],
 };
 
 export default config;

@@ -1,0 +1,37 @@
+.frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  touch-action: pan-y;
+}
+@media (min-width: 961px) {
+  .frame {
+    aspect-ratio: 6 / 5;
+  }
+}
+.frame::before {
+  content: "";
+  position: absolute;
+  inset: auto 14% 9%;
+  height: 14%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--color-deep-ocean) 22%, transparent),
+    transparent
+  );
+  filter: blur(14px);
+}
+.canvas {
+  opacity: 0;
+  cursor: crosshair;
+  transition: opacity var(--duration-reveal) var(--ease-out-expo);
+}
+.canvasReady {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .canvas {
+    transition: none;
+  }
+}
