@@ -7,7 +7,7 @@
   "trailingComma": "all",
   "sortImports": true,
   "sortTailwindcss": {
-    "stylesheet": "./_app/styles/globals.css",
+    "stylesheet": "./src/app/styles/globals.css",
     "functions": ["cn", "clsx", "cva"]
   },
   "ignorePatterns": [
