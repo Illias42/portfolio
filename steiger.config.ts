@@ -2,6 +2,9 @@ import fsd from "@feature-sliced/steiger-plugin";
 import { defineConfig } from "steiger";
 
 export default defineConfig([
+  {
+    ignores: ["node_modules/**", ".next/**", "public/**", "docs/**", ".claude/**"],
+  },
   ...fsd.configs.recommended,
   {
     rules: {
@@ -10,7 +13,7 @@ export default defineConfig([
     },
   },
   {
-    files: ["./src/_app/**"],
+    files: ["./_app/**"],
     rules: {
       "fsd/segments-by-purpose": "off",
     },
