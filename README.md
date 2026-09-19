@@ -9,8 +9,9 @@ Feature-Sliced Design and a Rust-based toolchain (bun, oxlint, oxfmt).
 - **Framework**: Next.js 16 (App Router, Turbopack, React 19, React Compiler)
 - **UI**: Tailwind CSS v4 (CSS-first tokens), `motion/react`
 - **3D**: three.js, `@react-three/fiber`, `@react-three/drei`
-- **Architecture**: [Feature-Sliced Design](https://feature-sliced.design) — `src/_app`, `src/_pages`,
-  `src/widgets`, `src/features`, `src/entities`, `src/shared`; `app/` holds only thin route files
+- **Architecture**: [Feature-Sliced Design](https://feature-sliced.design) at the repo root — `_app`,
+  `widgets`, `features`, `entities`, `shared`; `app/` holds Next.js routing only, no separate `pages`
+  layer, route files (`page.tsx`) compose the FSD layers directly
 - **Quality**: oxlint (type-aware), oxfmt, knip, steiger; lefthook + commitlint
 
 ## Getting started
@@ -35,20 +36,18 @@ Git hooks: `pre-commit` formats + lints staged files, `commit-msg` runs commitli
 ## Project layout
 
 ```
-app/                     Next.js routes (thin re-exports)
-src/
-  _app/                  providers, fonts, global styles + design tokens
-  _pages/<route>/        page compositions
-  widgets/<block>/       hero, project grid, …
-  features/<action>/     contact form, theme toggle, …
-  entities/<domain>/     project, experience, skill
-  shared/                ui primitives, lib (cn), config (siteConfig)
+app/                     route files (page.tsx, layout.tsx) — compose the FSD layers, no `pages` layer
+_app/                    providers, fonts, global styles + design tokens
+widgets/<block>/         hero, project grid, …
+features/<action>/       contact form, theme toggle, …
+entities/<domain>/       project, experience, skill
+shared/                  ui primitives, lib (cn), config (siteConfig)
 docs/content/            résumé and copy sources
 .claude/                 agent rules, skills, hooks and settings for Claude Code
 ```
 
-Conventions: kebab-case files, named exports in `src/`, public API via `index.ts`, WebGL content in
-`*.scene.tsx`, tokens in `src/_app/styles/globals.css`. See `CLAUDE.md` for the full rule set.
+Conventions: kebab-case files, named exports in the FSD layer folders, public API via `index.ts`, WebGL
+content in `*.scene.tsx`, tokens in `_app/styles/globals.css`. See `CLAUDE.md` for the full rule set.
 
 ## Environment
 
