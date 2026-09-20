@@ -1,11 +1,11 @@
 import { Hero } from "@/src/widgets/hero";
-import { WorkTransition } from "@/src/widgets/work-transition";
+import { SelectedWork } from "@/src/widgets/selected-work";
 
 export default function Home() {
   return (
     <main>
       <Hero />
-      <WorkTransition />
+      <SelectedWork />
     </main>
   );
 }

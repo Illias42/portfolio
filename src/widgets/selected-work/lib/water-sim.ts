@@ -9,20 +9,13 @@ import {
   Scene,
   ShaderMaterial,
   Vector2,
-  Vector3,
   WebGLRenderTarget,
   type IUniform,
   type Texture,
   type WebGLRenderer,
 } from "three";
 
-import {
-  dropFragment,
-  fullscreenVertex,
-  normalFragment,
-  sphereFragment,
-  stepFragment,
-} from "./pool-shaders";
+import { dropFragment, fullscreenVertex, normalFragment, stepFragment } from "./water-shaders";
 
 interface SimPass {
   material: ShaderMaterial;
@@ -52,20 +45,18 @@ export class WaterSim {
   private readonly scene = new Scene();
   private readonly camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
   private readonly quad: Mesh;
+  private readonly extent: Vector2;
   private readonly dropCenter = new Vector2();
   private readonly dropRadius: IUniform<number> = { value: 0 };
   private readonly dropStrength: IUniform<number> = { value: 0 };
-  private readonly sphereOld = new Vector3();
-  private readonly sphereNew = new Vector3();
-  private readonly sphereRadius: IUniform<number> = { value: 0 };
   private readonly drop: SimPass;
-  private readonly sphere: SimPass;
   private readonly step: SimPass;
   private readonly normals: SimPass;
 
   constructor(
     private readonly gl: WebGLRenderer,
     size: number,
+    extent: readonly [number, number],
   ) {
     const options = {
       type: simulationTextureType(gl),
@@ -77,6 +68,7 @@ export class WaterSim {
     };
     this.read = new WebGLRenderTarget(size, size, options);
     this.write = new WebGLRenderTarget(size, size, options);
+    this.extent = new Vector2(extent[0], extent[1]);
 
     const delta = { value: new Vector2(1 / size, 1 / size) };
     this.drop = createPass(dropFragment, {
@@ -84,13 +76,8 @@ export class WaterSim {
       radius: this.dropRadius,
       strength: this.dropStrength,
     });
-    this.sphere = createPass(sphereFragment, {
-      oldCenter: { value: this.sphereOld },
-      newCenter: { value: this.sphereNew },
-      radius: this.sphereRadius,
-    });
     this.step = createPass(stepFragment, { delta });
-    this.normals = createPass(normalFragment, { delta });
+    this.normals = createPass(normalFragment, { delta, uExtent: { value: this.extent } });
 
     this.quad = new Mesh(new PlaneGeometry(2, 2), this.step.material);
     this.quad.frustumCulled = false;
@@ -103,17 +90,10 @@ export class WaterSim {
   }
 
   addDrop(x: number, z: number, radius: number, strength: number) {
-    this.dropCenter.set(x, z);
+    this.dropCenter.set(x / this.extent.x, z / this.extent.y);
     this.dropRadius.value = radius;
     this.dropStrength.value = strength;
     this.run(this.drop);
-  }
-
-  moveSphere(from: Vector3, to: Vector3, radius: number) {
-    this.sphereOld.copy(from);
-    this.sphereNew.copy(to);
-    this.sphereRadius.value = radius;
-    this.run(this.sphere);
   }
 
   stepWaves() {
@@ -128,7 +108,6 @@ export class WaterSim {
     this.read.dispose();
     this.write.dispose();
     this.drop.material.dispose();
-    this.sphere.material.dispose();
     this.step.material.dispose();
     this.normals.material.dispose();
     this.quad.geometry.dispose();

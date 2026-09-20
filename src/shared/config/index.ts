@@ -1,2 +1,2 @@
 export { siteConfig } from "./site";
-export { heroMotion } from "./motion";
+export { caseMotion, heroMotion } from "./motion";

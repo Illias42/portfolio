@@ -25,21 +25,32 @@
   --palette-water-highlight: #dde9e7;
   --palette-water-aqua: #b8d8d4;
   --palette-water-accent: #3c9991;
-  --palette-flag-black: #000000;
-  --palette-flag-red: #dd0000;
-  --palette-flag-gold: #ffcc00;
+  --palette-signal: #e9a83a;
+  --color-pearl-ivory: #d8d3c7;
+  --palette-ceramic: #d9d4c8;
+  --palette-smoked-glass: #8a847a;
+  --palette-graphite-metal: #6d6a60;
+  --palette-work-card: #f7f4ed;
+  --palette-backdrop: #10161566;
+  --duration-rail: 600ms;
+  --duration-case: 700ms;
 }
 
 @theme inline {
   --color-work-foreground: var(--palette-work-ink);
   --color-work-secondary: var(--palette-work-secondary);
   --color-work-background: var(--palette-work-paper);
+  --color-work-card: var(--palette-work-card);
+  --color-backdrop: var(--palette-backdrop);
+  --radius-card: 16px;
+  --radius-case: 22px;
   --color-water-highlight: var(--palette-water-highlight);
   --color-water-aqua: var(--palette-water-aqua);
   --color-water-accent: var(--palette-water-accent);
-  --color-flag-black: var(--palette-flag-black);
-  --color-flag-red: var(--palette-flag-red);
-  --color-flag-gold: var(--palette-flag-gold);
+  --color-signal: var(--palette-signal);
+  --color-ceramic: var(--palette-ceramic);
+  --color-smoked-glass: var(--palette-smoked-glass);
+  --color-graphite-metal: var(--palette-graphite-metal);
   --color-background: var(--palette-paper);
   --color-foreground: var(--palette-ink);
   --color-muted: var(--palette-smoke);

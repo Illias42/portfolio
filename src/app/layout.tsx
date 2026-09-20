@@ -19,11 +19,14 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title: siteConfig.title, description: siteConfig.description },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children, modal }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${fontSans.variable} ${fontMono.variable} h-full`}>
       <body className="flex min-h-full flex-col">
-        <MotionProvider>{children}</MotionProvider>
+        <MotionProvider>
+          {children}
+          {modal}
+        </MotionProvider>
       </body>
     </html>
   );

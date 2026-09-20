@@ -1,0 +1,93 @@
+.panel {
+  width: min(96vw, 1800px);
+  height: 94dvh;
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-work-background);
+  color: var(--color-work-foreground);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-case);
+  outline: none;
+  scrollbar-width: thin;
+}
+.panel::backdrop {
+  background: var(--color-backdrop, rgb(16 22 21 / 0.4));
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  transition: opacity var(--duration-case) var(--ease-out-expo);
+}
+@starting-style {
+  .panel[open]::backdrop {
+    opacity: 0;
+  }
+}
+.panel[data-closing]::backdrop {
+  opacity: 0;
+  transition-duration: var(--duration-micro);
+}
+.closeBar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  height: 0;
+  padding: 18px 22px 0 0;
+  pointer-events: none;
+}
+.close {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 38px;
+  padding: 0 14px 0 18px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: var(--color-work-background);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-work-foreground);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-micro) var(--ease-out-expo),
+    background-color var(--duration-micro) var(--ease-out-expo);
+}
+.close span {
+  font-size: 16px;
+  line-height: 1;
+}
+.close:hover {
+  border-color: var(--color-work-foreground);
+  background: var(--color-work-card);
+}
+.close:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+.content {
+  min-height: 100%;
+}
+@media (max-width: 760px) {
+  .panel {
+    width: 100vw;
+    height: 100dvh;
+    border: 0;
+    border-radius: 0;
+  }
+  .closeBar {
+    padding: 14px 16px 0 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel::backdrop {
+    transition: none;
+  }
+}
