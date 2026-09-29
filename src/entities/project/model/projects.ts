@@ -1,6 +1,5 @@
 import type { Project, ProjectSlug } from "./types";
 
-// Facts come from docs/content/resume.md — rewrite tone, never substance.
 export const projects: readonly Project[] = [
   {
     slug: "telecom",
@@ -22,11 +21,11 @@ export const projects: readonly Project[] = [
     period: "2024—NOW",
     headline: ["Real-time systems", "that keep moving."],
     summary:
-      "Event-driven refactor of a legacy ride-hailing backend with a Node.js WebSocket layer for live ride tracking.",
-    tech: ["Node.js", "WebSockets", "Event-driven"],
+      "Modernized a legacy ride-hailing backend with event-driven flows and a WebSocket layer for real-time ride tracking.",
+    tech: ["Node.js", "NestJS", "WebSockets"],
     role: "Full-Stack Developer",
     company: "Kevych Solutions",
-    visual: "placeholder",
+    visual: "mobility",
     next: "connected-devices",
   },
   {
@@ -40,7 +39,7 @@ export const projects: readonly Project[] = [
     tech: ["MQTT", "AWS IoT Core", "Node.js"],
     role: "Full-Stack Developer",
     company: "Kevych Solutions",
-    visual: "placeholder",
+    visual: "quartz",
     next: "computer-vision",
   },
   {
@@ -50,11 +49,11 @@ export const projects: readonly Project[] = [
     period: "2021—2024",
     headline: ["Reading fuel prices", "from the roadside."],
     summary:
-      "Mobile and backend components of a computer-vision system recognising competitor fuel prices from roadside signage.",
+      "Built mobile and backend components of a computer-vision product that recognized competitor fuel prices from roadside signage.",
     tech: ["React Native", "Node.js", "NestJS"],
     role: "Full-Stack Developer",
     company: "Appexoft",
-    visual: "placeholder",
+    visual: "reserved",
     next: "telecom",
   },
 ];

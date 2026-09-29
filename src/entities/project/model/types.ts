@@ -1,6 +1,6 @@
 export type ProjectSlug = "telecom" | "mobility" | "connected-devices" | "computer-vision";
 
-type ProjectVisual = "telecom" | "placeholder";
+type ProjectVisual = "telecom" | "mobility" | "reserved" | "placeholder" | "quartz";
 
 export interface Project {
   slug: ProjectSlug;
@@ -25,7 +25,6 @@ export interface CaseSection {
   number: string;
   title: string;
   lead?: string;
-  /** One short fact set in display type, e.g. the ~1M user scale. */
   highlight?: string;
   paragraphs?: readonly string[];
   bullets?: readonly string[];
@@ -36,5 +35,6 @@ export interface CaseSection {
 
 export interface CaseStudyContent {
   slug: ProjectSlug;
+  summary?: string;
   sections: readonly CaseSection[];
 }

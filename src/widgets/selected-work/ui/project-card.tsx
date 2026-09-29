@@ -5,7 +5,9 @@ import { useRef, type MouseEvent } from "react";
 
 import type { Project } from "../../../entities/project";
 import { caseTransition } from "../model/case-transition";
+import { RealtimeRouteScene } from "./mobility-canvas";
 import { NetworkCanvas } from "./network-canvas";
+import { QuartzCanvas } from "./quartz-canvas";
 
 import styles from "./work-rail.module.css";
 
@@ -14,7 +16,6 @@ export type CardState = "active" | "next" | "rest";
 interface ProjectCardProps {
   project: Project;
   state: CardState;
-  /** Runs the card's WebGL loop (active or hovered card only). */
   animate: boolean;
   onSelect: () => void;
   onHoverChange: (hovering: boolean) => void;
@@ -67,7 +68,6 @@ export function ProjectCard({
           aria-label={`Show project ${project.number}: ${project.sector}`}
           onClick={() => {
             onSelect();
-            // The select button unmounts once the card is active; keep focus inside the card.
             requestAnimationFrame(() =>
               document.getElementById(triggerId)?.focus({ preventScroll: true }),
             );
@@ -99,6 +99,16 @@ export function ProjectCard({
         </Link>
         <p className={styles.tech}>{project.tech.join(" / ")}</p>
       </div>
+      {project.visual === "quartz" && (
+        <div className={styles.visual}>
+          <QuartzCanvas variant="card" active={animate} />
+        </div>
+      )}
+      {project.visual === "mobility" && (
+        <div className={styles.visual}>
+          <RealtimeRouteScene variant="card" active={animate} />
+        </div>
+      )}
       {project.visual === "telecom" && (
         <div className={styles.visual}>
           <NetworkCanvas variant="card" active={animate} />
