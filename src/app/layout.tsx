@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { fontMono, fontSans } from "@/public/fonts";
+import { fontMono, fontSans, fontScript, fontSerif } from "@/public/fonts";
 import { MotionProvider } from "@/src/app/providers";
 import { siteConfig } from "@/src/shared/config";
 
@@ -21,7 +21,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children, modal }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${fontSans.variable} ${fontMono.variable} h-full`}>
+    <html
+      lang="en"
+      className={`${fontSans.variable} ${fontMono.variable} ${fontSerif.variable} ${fontScript.variable} h-full`}
+    >
       <body className="flex min-h-full flex-col">
         <MotionProvider>
           {children}

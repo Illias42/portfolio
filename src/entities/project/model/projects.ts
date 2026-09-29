@@ -9,7 +9,7 @@ export const projects: readonly Project[] = [
     headline: ["Infrastructure", "behind ~1M users."],
     summary: "Backend services for eSIM, phone number provisioning, call routing and VPN.",
     tech: ["Node.js", "NestJS", "SIP", "VoIP", "PostgreSQL", "Redis"],
-    role: "Full-Stack Developer",
+    role: "Full Stack Engineer",
     company: "Kevych Solutions",
     visual: "telecom",
     next: "mobility",
@@ -23,7 +23,7 @@ export const projects: readonly Project[] = [
     summary:
       "Modernized a legacy ride-hailing backend with event-driven flows and a WebSocket layer for real-time ride tracking.",
     tech: ["Node.js", "NestJS", "WebSockets"],
-    role: "Full-Stack Developer",
+    role: "Full Stack Engineer",
     company: "Kevych Solutions",
     visual: "mobility",
     next: "connected-devices",
@@ -37,7 +37,7 @@ export const projects: readonly Project[] = [
     summary:
       "MQTT-based device control through AWS IoT Core for real-time remote management of connected devices.",
     tech: ["MQTT", "AWS IoT Core", "Node.js"],
-    role: "Full-Stack Developer",
+    role: "Full Stack Engineer",
     company: "Kevych Solutions",
     visual: "quartz",
     next: "computer-vision",
@@ -51,7 +51,7 @@ export const projects: readonly Project[] = [
     summary:
       "Built mobile and backend components of a computer-vision product that recognized competitor fuel prices from roadside signage.",
     tech: ["React Native", "Node.js", "NestJS"],
-    role: "Full-Stack Developer",
+    role: "Full Stack Engineer",
     company: "Appexoft",
     visual: "optics",
     next: "telecom",

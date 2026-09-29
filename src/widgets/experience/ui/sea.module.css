@@ -1,0 +1,51 @@
+.frame {
+  position: absolute;
+  pointer-events: none;
+}
+.image {
+  object-fit: cover;
+  object-position: 80% center;
+}
+.shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-night) 20%, transparent),
+      transparent 25%,
+      transparent 70%,
+      color-mix(in srgb, var(--color-night) 70%, transparent)
+    ),
+    linear-gradient(
+      to right,
+      var(--color-night) 0%,
+      color-mix(in srgb, var(--color-night) 94%, transparent) 32%,
+      color-mix(in srgb, var(--color-night) 80%, transparent) 55%,
+      color-mix(in srgb, var(--color-night) 32%, transparent) 78%,
+      transparent
+    );
+}
+@media (max-width: 1100px) {
+  .shade {
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-night) 97%, transparent),
+      color-mix(in srgb, var(--color-night) 82%, transparent) 60%,
+      color-mix(in srgb, var(--color-night) 30%, transparent)
+    );
+  }
+}
+@media (max-width: 760px) {
+  .image {
+    object-position: 90% center;
+  }
+  .shade {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-night) 93%, transparent),
+      color-mix(in srgb, var(--color-night) 85%, transparent) 60%,
+      color-mix(in srgb, var(--color-night) 60%, transparent)
+    );
+  }
+}

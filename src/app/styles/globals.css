@@ -34,6 +34,17 @@
   --palette-backdrop: #10161566;
   --duration-rail: 600ms;
   --duration-case: 700ms;
+  --palette-night: #0e1517;
+  --palette-night-text: #c9ccc7;
+  --palette-night-muted: #7f8a8b;
+  --palette-night-line: #faf9f51f;
+  --palette-sand: #b3a894;
+  --palette-sun-dim: #f4b83f33;
+  --palette-limestone: #efe3d2;
+  --palette-umber: #5a4128;
+  --palette-dune: #6f6454;
+  --palette-dune-line: #6f645466;
+  --duration-link: 500ms;
 }
 
 @theme inline {
@@ -67,9 +78,21 @@
   --color-haze: var(--palette-haze);
   --color-coast: var(--palette-coast);
   --color-sun-haze: var(--palette-sun-haze);
+  --color-night: var(--palette-night);
+  --color-night-text: var(--palette-night-text);
+  --color-night-muted: var(--palette-night-muted);
+  --color-night-line: var(--palette-night-line);
+  --color-sand: var(--palette-sand);
+  --color-sun-dim: var(--palette-sun-dim);
+  --color-limestone: var(--palette-limestone);
+  --color-umber: var(--palette-umber);
+  --color-dune: var(--palette-dune);
+  --color-dune-line: var(--palette-dune-line);
 
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, monospace;
+  --font-serif: var(--font-serif), ui-serif, Georgia, serif;
+  --font-script: var(--font-script), cursive;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
@@ -80,6 +103,11 @@
     @apply bg-background text-foreground antialiased;
     color-scheme: light;
     scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   body {
