@@ -9,6 +9,7 @@ import {
 import { cn } from "../../../shared/lib";
 import { RealtimeRouteScene } from "./mobility-canvas";
 import { NetworkCanvas } from "./network-canvas";
+import { ComputerVisionScene } from "./optics-canvas";
 import { QuartzCanvas } from "./quartz-canvas";
 
 import styles from "./case-study.module.css";
@@ -115,22 +116,10 @@ export function CaseStudy({ project, content, mode }: CaseStudyProps) {
           </Title>
           <p className={styles.lede}>{content?.summary ?? project.summary}</p>
           <div className={styles.visual}>
-            {project.visual === "telecom" && (
-              <>
-                <NetworkCanvas variant="case" active />
-                <ul className={styles.labels} aria-label="Platform services">
-                  <li className={styles.labelRouting}>Call routing</li>
-                  <li className={styles.labelNumbers}>
-                    eSIM
-                    <br />
-                    provisioning
-                  </li>
-                  <li className={styles.labelVpn}>VPN services</li>
-                </ul>
-              </>
-            )}
+            {project.visual === "telecom" && <NetworkCanvas variant="case" active />}
             {project.visual === "quartz" && <QuartzCanvas variant="case" active />}
             {project.visual === "mobility" && <RealtimeRouteScene variant="case" active />}
+            {project.visual === "optics" && <ComputerVisionScene variant="case" active />}
             {project.visual === "placeholder" && (
               <div className={styles.placeholder} aria-hidden="true">
                 Visualization in progress

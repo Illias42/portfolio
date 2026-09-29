@@ -6,7 +6,9 @@ import { useEffect, useRef, useState } from "react";
 
 import { cn, cssColorRgb } from "../../../shared/lib";
 import { networkConfig, type NetworkProfile } from "../config/network";
+import { createLabelRegistry } from "../lib/label-anchors";
 import { useCaseSettled } from "../model/case-transition";
+import { AnchorLabels, type AnchorLabel } from "./anchor-labels";
 import type { NetworkPalette, NetworkVariant } from "./network.scene";
 
 import styles from "./network.module.css";
@@ -14,6 +16,24 @@ import styles from "./network.module.css";
 const NetworkScene = dynamic(() => import("./network.scene").then((m) => m.NetworkScene), {
   ssr: false,
 });
+
+const LABELS: readonly AnchorLabel[] = [
+  {
+    id: "routing",
+    lines: ["Call routing"],
+    leader: [40, -36],
+    compactLeader: [28, -28],
+    cardLeader: [0, -34],
+  },
+  {
+    id: "esim",
+    lines: ["eSIM", "provisioning"],
+    leader: [44, -30],
+    compactLeader: [-30, -30],
+    cardLeader: [0, 34],
+  },
+  { id: "vpn", lines: ["VPN services"], leader: [-44, 0], compactLeader: [-24, 0] },
+];
 
 function readPalette(): NetworkPalette {
   return {
@@ -57,19 +77,18 @@ interface Setup {
 
 interface NetworkCanvasProps {
   variant: NetworkVariant;
-  /** Only the active card (or the open case) runs the render loop; the rest render on demand. */
   active: boolean;
   className?: string;
 }
 
 export function NetworkCanvas({ variant, active, className }: NetworkCanvasProps) {
   const frame = useRef<HTMLDivElement>(null);
+  const labelTargets = useRef(createLabelRegistry());
   const reduced = useReducedMotion();
   const [setup, setSetup] = useState<Setup | null>(null);
   const [inView, setInView] = useState(false);
   const [ready, setReady] = useState(false);
   const settled = useCaseSettled();
-  // The case scene waits for the overlay's open animation so context creation never lands mid-frame.
   const mountScene = setup !== null && (variant !== "case" || settled);
 
   useEffect(() => {
@@ -114,7 +133,11 @@ export function NetworkCanvas({ variant, active, className }: NetworkCanvasProps
           variant={variant}
           animate={inView && active && !reduced}
           onReady={() => setReady(true)}
+          labelTargets={labelTargets}
         />
+      )}
+      {(variant === "case" || active) && ready && (
+        <AnchorLabels labels={LABELS} targets={labelTargets} variant={variant} />
       )}
     </div>
   );

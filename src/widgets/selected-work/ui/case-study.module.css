@@ -21,7 +21,6 @@
 .scrollHint,
 .facts dt,
 .factTech,
-.labels,
 .stack,
 .layerLabel,
 .placeholder {
@@ -77,39 +76,6 @@
   border-radius: var(--radius-card);
   font-size: 9px;
   letter-spacing: 0.16em;
-}
-.labels {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  pointer-events: none;
-  font-size: clamp(10px, 0.72vw, 11px);
-  line-height: 1.65;
-}
-.labels li {
-  position: absolute;
-}
-.labels li::after {
-  content: "";
-  display: block;
-  width: 24px;
-  height: 1px;
-  margin-top: 12px;
-  background: var(--color-line);
-}
-.labelRouting {
-  top: 22%;
-  right: 10%;
-}
-.labelNumbers {
-  top: 46%;
-  right: 4%;
-}
-.labelVpn {
-  bottom: 16%;
-  left: 12%;
 }
 .facts {
   display: grid;
@@ -309,9 +275,6 @@
   }
 }
 @media (max-width: 520px) {
-  .labels {
-    display: none;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .nextArrow {

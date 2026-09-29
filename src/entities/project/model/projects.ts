@@ -53,7 +53,7 @@ export const projects: readonly Project[] = [
     tech: ["React Native", "Node.js", "NestJS"],
     role: "Full-Stack Developer",
     company: "Appexoft",
-    visual: "reserved",
+    visual: "optics",
     next: "telecom",
   },
 ];

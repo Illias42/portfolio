@@ -13,6 +13,7 @@ import {
 } from "three";
 
 import { mobilityConfig, type BeadFinish } from "../config/mobility";
+import { useLabelAnchors, type LabelAnchor, type LabelTargets } from "../lib/label-anchors";
 import { laneCurves } from "../lib/mobility-lanes";
 
 type Rgb = readonly [number, number, number];
@@ -32,6 +33,7 @@ interface Props {
   compact: boolean;
   variant: "card" | "case";
   animate: boolean;
+  labelTargets?: LabelTargets;
 }
 
 const { hero, heroLane, trail, lanes, beads, camera } = mobilityConfig;
@@ -40,6 +42,17 @@ const color = (rgb: Rgb) => new Color().setRGB(rgb[0], rgb[1], rgb[2]);
 const cssColor = (rgb: Rgb) => new Color().setRGB(rgb[0], rgb[1], rgb[2], SRGBColorSpace);
 const EDGE_FADE = 0.025;
 const START = 0.2;
+
+type Point = readonly [number, number, number];
+function lanePoint(lane: number, t: number, lift: number): Point {
+  const p = laneCurves[lane]?.getPointAt(t);
+  return p ? [p.x, p.y + lift, p.z] : [0, 0, 0];
+}
+const flowPoint = lanePoint(3, 0.4, 0.05);
+const stateBead = beads[0];
+const statePoint = stateBead
+  ? lanePoint(stateBead.lane, stateBead.t, stateBead.radius)
+  : ([0, 0, 0] as const);
 
 function glassFinish(palette: MobilityPalette, compact: boolean) {
   const tint = color(palette.glass).lerp(new Color(1, 1, 1), 0.85);
@@ -174,7 +187,7 @@ function viewFor(variant: Props["variant"], compact: boolean) {
   return compact ? camera.compact : camera[variant];
 }
 
-function Lanes({ palette, animate, compact, variant }: Props) {
+function Lanes({ palette, animate, compact, variant, labelTargets }: Props) {
   const view = viewFor(variant, compact);
   const backdrop = cssColor(variant === "card" ? palette.card : palette.paper);
   const pearl = useRef<Mesh>(null);
@@ -196,6 +209,18 @@ function Lanes({ palette, animate, compact, variant }: Props) {
     .filter(({ lane }) => !compact || lane.compact);
   const visibleBeads = beads.filter((bead) => !compact || lanes[bead.lane]?.compact);
   const segments = compact ? 96 : 160;
+
+  const anchors: LabelAnchor[] = [
+    {
+      id: "live",
+      object: () => pearl.current,
+      offset: [0, mobilityConfig.heroRadius, 0],
+      fade: () => pearl.current?.scale.x ?? 0,
+    },
+    { id: "flow", object: () => sculpture.current, offset: flowPoint },
+    { id: "state", object: () => sculpture.current, offset: statePoint },
+  ];
+  useLabelAnchors(labelTargets, anchors);
 
   useFrame((state, delta) => {
     if (animate)

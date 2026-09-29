@@ -5,10 +5,26 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 
 import { cssColorRgb } from "../../../shared/lib";
+import { createLabelRegistry } from "../lib/label-anchors";
 import { useCaseSettled } from "../model/case-transition";
+import { AnchorLabels, type AnchorLabel } from "./anchor-labels";
 import type { MobilityPalette } from "./mobility.scene";
 
 import styles from "./mobility.module.css";
+
+const VIEW_MARGIN = "600px 0px";
+
+const LABELS: readonly AnchorLabel[] = [
+  { id: "live", lines: ["Live tracking"], leader: [46, -58], compactLeader: [30, -40] },
+  {
+    id: "flow",
+    lines: ["Event flow"],
+    leader: [-40, -46],
+    compactLeader: [0, -40],
+    cardLeader: [0, -44],
+  },
+  { id: "state", lines: ["Ride state"], leader: [44, -46], compactLeader: [26, -34] },
+];
 
 const MobilityScene = dynamic(() => import("./mobility.scene").then((m) => m.MobilityScene), {
   ssr: false,
@@ -22,9 +38,11 @@ export function RealtimeRouteScene({
   variant: "card" | "case";
 }) {
   const frame = useRef<HTMLDivElement>(null);
+  const labelTargets = useRef(createLabelRegistry());
   const reduced = useReducedMotion();
   const settled = useCaseSettled();
-  const [visible, setVisible] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [setup, setSetup] = useState<{ compact: boolean; palette: MobilityPalette } | null>(null);
   useEffect(() => {
     const el = frame.current;
@@ -50,8 +68,13 @@ export function RealtimeRouteScene({
       });
     update();
     media.addEventListener("change", update);
-    const observer = new IntersectionObserver(([entry]) =>
-      setVisible(entry?.isIntersecting ?? false),
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const hit = entry?.isIntersecting ?? false;
+        setInView(hit);
+        if (hit) setMounted(true);
+      },
+      { rootMargin: VIEW_MARGIN },
     );
     observer.observe(el);
     return () => {
@@ -67,15 +90,16 @@ export function RealtimeRouteScene({
       data-active={active}
       aria-hidden="true"
     >
-      {setup && visible && (variant !== "case" || settled) && (
-        <MobilityScene {...setup} variant={variant} animate={active && !reduced} />
+      {setup && mounted && (variant !== "case" || settled) && (
+        <MobilityScene
+          {...setup}
+          variant={variant}
+          animate={active && !reduced && inView}
+          labelTargets={labelTargets}
+        />
       )}
-      {variant === "case" && (
-        <ul className={styles.labels}>
-          <li>Live tracking</li>
-          <li>Event flow</li>
-          <li>Ride state</li>
-        </ul>
+      {(variant === "case" || active) && (
+        <AnchorLabels labels={LABELS} targets={labelTargets} variant={variant} />
       )}
     </div>
   );

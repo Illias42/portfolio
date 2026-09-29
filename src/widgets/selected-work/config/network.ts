@@ -76,6 +76,11 @@ export const networkConfig = {
   links,
   glassVariants,
   lamp: { nodes: [1, 4], intensity: 1.1, coreScale: 0.18 },
+  labelNodes: {
+    routing: { node: 1, side: [0, 1, 0] },
+    esim: { node: 3, side: [0, 1, 0] },
+    vpn: { node: 6, side: [-1, 0, 0] },
+  },
   desktop: {
     dpr: [1, 1.5],
     sim: 256,

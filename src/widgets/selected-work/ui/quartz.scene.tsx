@@ -19,6 +19,7 @@ import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUnifo
 
 import type { Rgb01 } from "../../../shared/lib";
 import { quartzConfig } from "../config/quartz";
+import { useLabelAnchors, type LabelAnchor, type LabelTargets } from "../lib/label-anchors";
 import {
   crystalSize,
   footprintCentre,
@@ -53,6 +54,7 @@ interface Props {
   compact: boolean;
   animate: boolean;
   variant: QuartzVariant;
+  labelTargets?: LabelTargets;
 }
 
 RectAreaLightUniformsLib.init();
@@ -84,6 +86,15 @@ const causticUniforms = {
   uGlow: { value: 1 },
   uTime: { value: 0 },
 };
+
+function apexOf(): readonly [number, number, number] {
+  const position = hullGeometry.getAttribute("position");
+  let top = 0;
+  for (let i = 1; i < position.count; i++) if (position.getY(i) > position.getY(top)) top = i;
+  return [position.getX(top), position.getY(top), position.getZ(top)];
+}
+const apex = apexOf();
+const coreOffset = corePosition.toArray();
 
 const breath = (time: number, phase = 0) => Math.sin((time / core.period) * TAU + phase);
 
@@ -193,7 +204,7 @@ function CameraRig({ variant, compact, animate }: Pick<Props, "variant" | "compa
   return null;
 }
 
-function Crystal({ palette, compact, animate, variant }: Props) {
+function Crystal({ palette, compact, animate, variant, labelTargets }: Props) {
   const sculpture = useRef<Group>(null);
   const coreLight = useRef<PointLight>(null);
   const echoLight = useRef<PointLight>(null);
@@ -216,6 +227,11 @@ function Crystal({ palette, compact, animate, variant }: Props) {
     }),
     [palette],
   );
+  const anchors: LabelAnchor[] = [
+    { id: "cloud", object: () => sculpture.current, offset: apex },
+    { id: "control", object: () => sculpture.current, offset: coreOffset },
+  ];
+  useLabelAnchors(labelTargets, anchors);
   const shown = fractures.filter(({ fracture }) => !compact || fracture.compact);
 
   useLayoutEffect(() => {

@@ -1,0 +1,108 @@
+.frame {
+  position: absolute;
+  inset: 0;
+  touch-action: pan-y;
+}
+.frame[data-variant="case"] {
+  position: relative;
+  inset: auto;
+  height: clamp(320px, 40vw, 560px);
+}
+@media (min-width: 761px) {
+  .frame[data-variant="case"] .recognition {
+    --reach: 60px;
+    left: 35%;
+    bottom: 3%;
+  }
+  .frame[data-variant="case"] .data {
+    top: 40%;
+    right: 27%;
+  }
+}
+.frame canvas {
+  mask-image:
+    linear-gradient(to bottom, transparent, black 6%, black 92%, transparent),
+    linear-gradient(to right, transparent, black 6%, black 96%, transparent);
+  mask-composite: intersect;
+}
+.labels {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+  font: 9px/1.7 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-work-secondary);
+}
+.labels li {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+}
+.labels li::before,
+.labels li::after {
+  content: "";
+  position: absolute;
+}
+.labels li::before {
+  border: 0 solid var(--color-line);
+}
+.labels li::after {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-work-secondary);
+}
+.labels .recognition {
+  --reach: 70px;
+  left: 58%;
+  bottom: 9%;
+}
+.labels .recognition::before {
+  bottom: calc(100% + 6px);
+  left: 1px;
+  height: var(--reach);
+  border-left-width: 1px;
+}
+.labels .recognition::after {
+  bottom: calc(100% + 4px + var(--reach));
+  left: -0.5px;
+}
+.labels .data {
+  top: 40%;
+  right: 3%;
+}
+.labels .data::before {
+  top: calc(100% + 6px);
+  left: -42px;
+  width: 46px;
+  height: 26px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+}
+.labels .data::after {
+  top: calc(100% + 30px);
+  left: -46px;
+}
+@media (max-width: 760px) {
+  .frame {
+    position: relative;
+    inset: auto;
+    height: clamp(260px, 72vw, 340px);
+  }
+  .labels {
+    font-size: 8px;
+  }
+  .labels .recognition {
+    --reach: 64px;
+    left: 19%;
+    bottom: -3%;
+  }
+  .labels .data {
+    top: 17%;
+    right: 4%;
+  }
+}

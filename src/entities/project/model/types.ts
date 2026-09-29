@@ -1,6 +1,6 @@
 export type ProjectSlug = "telecom" | "mobility" | "connected-devices" | "computer-vision";
 
-type ProjectVisual = "telecom" | "mobility" | "reserved" | "placeholder" | "quartz";
+type ProjectVisual = "telecom" | "mobility" | "optics" | "placeholder" | "quartz";
 
 export interface Project {
   slug: ProjectSlug;

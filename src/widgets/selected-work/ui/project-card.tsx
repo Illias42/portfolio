@@ -7,6 +7,7 @@ import type { Project } from "../../../entities/project";
 import { caseTransition } from "../model/case-transition";
 import { RealtimeRouteScene } from "./mobility-canvas";
 import { NetworkCanvas } from "./network-canvas";
+import { ComputerVisionScene } from "./optics-canvas";
 import { QuartzCanvas } from "./quartz-canvas";
 
 import styles from "./work-rail.module.css";
@@ -74,22 +75,27 @@ export function ProjectCard({
           }}
         />
       )}
-      <div className={styles.meta}>
+      <div className={styles.meta} data-label-guard>
         <span>{project.number}</span>
         <span>{project.period}</span>
       </div>
       <div className={styles.copy}>
-        <p className={styles.sector}>{project.sector}</p>
-        <h3 id={titleId} className={styles.title}>
+        <p className={styles.sector} data-label-guard>
+          {project.sector}
+        </p>
+        <h3 id={titleId} className={styles.title} data-label-guard>
           {project.headline[0]}
           <br />
           {project.headline[1]}
         </h3>
-        <p className={styles.summary}>{project.summary}</p>
+        <p className={styles.summary} data-label-guard>
+          {project.summary}
+        </p>
         <div className={styles.spacer} />
         <Link
           id={triggerId}
           className={styles.cta}
+          data-label-guard
           href={`/work/${project.slug}`}
           scroll={false}
           draggable={false}
@@ -97,7 +103,9 @@ export function ProjectCard({
         >
           View case <span aria-hidden="true">↗</span>
         </Link>
-        <p className={styles.tech}>{project.tech.join(" / ")}</p>
+        <p className={styles.tech} data-label-guard>
+          {project.tech.join(" / ")}
+        </p>
       </div>
       {project.visual === "quartz" && (
         <div className={styles.visual}>
@@ -107,6 +115,11 @@ export function ProjectCard({
       {project.visual === "mobility" && (
         <div className={styles.visual}>
           <RealtimeRouteScene variant="card" active={animate} />
+        </div>
+      )}
+      {project.visual === "optics" && (
+        <div className={styles.visual}>
+          <ComputerVisionScene variant="card" active={animate} />
         </div>
       )}
       {project.visual === "telecom" && (

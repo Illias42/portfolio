@@ -14,78 +14,10 @@
     linear-gradient(to right, transparent, black 4%, black 96%, transparent);
   mask-composite: intersect;
 }
-.labels {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  pointer-events: none;
-  font: 9px var(--font-mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-work-secondary);
-}
-.labels li {
-  position: absolute;
-  display: flex;
-  align-items: center;
-}
-.labels li::before,
-.labels li::after {
-  content: "";
-  flex: none;
-  background: var(--color-line);
-}
-.labels li::after {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--color-work-secondary);
-}
-.above {
-  top: 11%;
-  left: 55%;
-  flex-direction: column;
-}
-.above::before {
-  order: 1;
-  width: 1px;
-  height: 30px;
-  margin-top: 9px;
-}
-.above::after {
-  order: 2;
-}
-.beside {
-  right: 7%;
-  bottom: 13%;
-  flex-direction: column;
-  align-items: flex-end;
-}
-.beside::before {
-  order: -1;
-  width: 1px;
-  height: 26px;
-  margin: 0 18px 9px 0;
-}
-.beside::after {
-  order: -2;
-  margin-right: 16px;
-}
 @media (max-width: 760px) {
   .frame {
     position: relative;
     inset: auto;
     height: clamp(260px, 72vw, 340px);
-  }
-  .labels {
-    font-size: 8px;
-  }
-  .above {
-    top: 4%;
-  }
-  .beside {
-    right: 4%;
   }
 }

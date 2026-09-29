@@ -29,6 +29,7 @@ import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUnifo
 
 import type { Rgb01 } from "../../../shared/lib";
 import { networkConfig, type GlassVariant, type NetworkProfile } from "../config/network";
+import { useLabelAnchors, type LabelAnchor, type LabelTargets } from "../lib/label-anchors";
 import { MAX_NODES, surfaceFragment, surfaceVertex } from "../lib/water-shaders";
 import { WaterSim } from "../lib/water-sim";
 
@@ -56,6 +57,7 @@ export interface NetworkSceneProps {
   variant: NetworkVariant;
   className?: string;
   onReady: () => void;
+  labelTargets?: LabelTargets;
 }
 
 RectAreaLightUniformsLib.init();
@@ -94,7 +96,6 @@ const floatPeriods = nodes.map(
     floatMotion.minPeriod + ((i * 1.37) % 1) * (floatMotion.maxPeriod - floatMotion.minPeriod),
 );
 
-// Wire from sphere surface to sphere surface with a gentle arch and sideways bend.
 function buildCurve(a: Vector3, b: Vector3, ra: number, rb: number): QuadraticBezierCurve3 {
   const direction = new Vector3().subVectors(b, a).normalize();
   const start = a.clone().addScaledVector(direction, ra * 0.92);
@@ -114,7 +115,7 @@ const curves = links.map((link) =>
     nodes[link.to]?.radius ?? 0,
   ),
 );
-// Wires nearer the camera (+z) are slightly heavier and more present than distant ones.
+
 const linkDepth = curves.map((curve) => {
   const z = curve.getPoint(0.5, point).z;
   return 1 - linkConfig.depthRange / 2 + (linkConfig.depthRange * (z + 1.4)) / 2.8;
@@ -171,7 +172,6 @@ function random(min: number, max: number): number {
   return min + Math.random() * (max - min);
 }
 
-// Fine grain so the ceramic reads as a fired surface rather than a mathematical sphere.
 function createGrainTexture(size = 128): DataTexture {
   const data = new Uint8Array(size * size);
   for (let i = 0; i < data.length; i++) data[i] = 118 + Math.floor(Math.random() * 20);
@@ -311,6 +311,7 @@ function Network({
   profile,
   animate,
   onReady,
+  labelTargets,
 }: Omit<NetworkSceneProps, "className" | "variant">) {
   const gl = useThree((state) => state.gl);
   const readySent = useRef(false);
@@ -429,6 +430,18 @@ function Network({
       signalMaterials.halo.dispose();
     };
   }, [grain, nodeMaterials, wires, signalMaterials]);
+
+  const anchors: LabelAnchor[] = Object.entries(networkConfig.labelNodes).map(
+    ([id, { node, side }]) => {
+      const radius = nodes[node]?.radius ?? 0;
+      return {
+        id,
+        object: () => nodeMeshes.current[node],
+        offset: [side[0] * radius, side[1] * radius, side[2] * radius],
+      };
+    },
+  );
+  useLabelAnchors(labelTargets, anchors);
 
   useFrame((state, delta) => {
     const s = world.current;
