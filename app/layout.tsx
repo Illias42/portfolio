@@ -5,6 +5,7 @@ import { MotionProvider } from "@/_app/providers";
 import { siteConfig, staticPalette } from "@/shared/config";
 
 import "@/_app/styles/globals.css";
+import { ClarityScript, GaScripts } from "@/shared/ui/analytics";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -55,6 +56,8 @@ export default function RootLayout({ children, modal }: LayoutProps<"/">) {
           {children}
           {modal}
         </MotionProvider>
+        <ClarityScript />
+        <GaScripts />
       </body>
     </html>
   );
