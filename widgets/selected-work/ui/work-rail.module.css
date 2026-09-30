@@ -1,0 +1,369 @@
+.rail {
+  --rail-inner: calc(min(100vw, 1760px) * 0.875);
+  position: relative;
+  display: flex;
+  gap: var(--rail-gap);
+  margin-top: 32px;
+  margin-right: calc((100% - 100vw) / 2);
+  padding-right: calc((100vw - 100%) / 2);
+  padding-bottom: 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  cursor: grab;
+  outline: none;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+.rail[data-dragging] {
+  cursor: grabbing;
+  scroll-behavior: auto;
+  user-select: none;
+}
+
+.card {
+  --card-chrome: 54px;
+  position: relative;
+  flex: 0 0 var(--w-rest);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: clamp(420px, 36vw, 540px);
+  padding: 26px 26px 24px;
+  background: var(--color-work-card);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    flex-basis var(--duration-rail) var(--ease-in-out-quart),
+    border-color var(--duration-micro) var(--ease-out-expo);
+}
+.card[data-state="active"] {
+  flex-basis: var(--w-active);
+  cursor: default;
+}
+.card[data-state="next"] {
+  flex-basis: var(--w-next);
+}
+.select {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+.select:focus-visible {
+  outline: 2px solid var(--color-work-foreground);
+  outline-offset: 2px;
+}
+@media (hover: hover) {
+  .rail:hover .card[data-state="active"]:not(:hover) {
+    flex-basis: var(--w-active-compressed);
+  }
+  .card:not([data-state="active"]):hover {
+    flex-basis: var(--w-hover);
+    border-color: var(--color-work-secondary);
+  }
+  .card:not([data-state="active"]):hover .title {
+    color: var(--color-work-foreground);
+  }
+}
+.meta {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--color-work-secondary);
+}
+.meta span:first-child {
+  color: var(--color-work-foreground);
+}
+.copy {
+  --card-inner: calc(var(--rail-inner) * var(--f-rest) - var(--card-chrome));
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: var(--card-inner);
+  max-width: 100%;
+  min-height: 0;
+}
+.rail[data-measured] .copy {
+  transition: width var(--duration-rail) var(--ease-in-out-quart);
+}
+.card[data-state="next"] .copy {
+  --card-inner: calc(var(--rail-inner) * var(--f-next) - var(--card-chrome));
+}
+.card[data-state="active"] .copy {
+  --card-inner: calc(var(--rail-inner) * var(--f-active) - var(--card-chrome));
+  width: calc(var(--card-inner) * 0.56);
+}
+.sector {
+  margin-top: 40px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-work-secondary);
+}
+.title {
+  margin-top: 10px;
+  font-size: clamp(20px, 1.65vw, 27px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: var(--color-work-secondary);
+  transition:
+    font-size var(--duration-rail) var(--ease-in-out-quart),
+    color var(--duration-rail) var(--ease-in-out-quart);
+}
+.card[data-state="active"] .title {
+  font-size: clamp(26px, 2.4vw, 40px);
+  color: var(--color-work-foreground);
+}
+.summary {
+  margin-top: 14px;
+  max-width: 34ch;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-work-secondary);
+}
+@media (min-width: 761px) {
+  .card:not([data-state="active"]) .summary {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+}
+@media (max-width: 1100px) and (min-width: 761px) {
+  .card[data-state="rest"] .summary {
+    display: none;
+  }
+}
+.spacer {
+  flex: 1;
+  min-height: 16px;
+}
+.cta {
+  align-self: flex-start;
+}
+.tech {
+  margin-top: 40px;
+  max-width: 30ch;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  line-height: 1.9;
+  text-transform: uppercase;
+  color: var(--color-work-secondary);
+}
+.visual {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+  width: clamp(520px, 44vw, 720px);
+}
+@media (min-width: 761px) {
+  .visual {
+    --visual-w: clamp(520px, 44vw, 720px);
+    --card-settled: calc(var(--rail-inner) * var(--f-rest));
+    left: 0;
+    right: auto;
+    width: var(--visual-w);
+    transform: translateX(calc(var(--card-settled) - 2px - var(--visual-w)));
+  }
+  .card[data-state="next"] .visual {
+    --card-settled: calc(var(--rail-inner) * var(--f-next));
+  }
+  .card[data-state="active"] .visual {
+    --card-settled: calc(var(--rail-inner) * var(--f-active));
+  }
+  .rail[data-measured] .visual {
+    transition: transform var(--duration-rail) var(--ease-in-out-quart);
+  }
+}
+
+.controls {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 36px;
+  padding-top: 22px;
+  border-top: 1px solid var(--color-line);
+}
+.indicators {
+  display: flex;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.indicators button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--color-work-secondary);
+  cursor: pointer;
+  transition: color var(--duration-micro) var(--ease-out-expo);
+}
+.indicators button:hover,
+.indicators button[aria-current="true"] {
+  color: var(--color-work-foreground);
+}
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-line);
+  transition: background-color var(--duration-micro) var(--ease-out-expo);
+}
+.indicators button[aria-current="true"] .dot {
+  background: var(--color-work-foreground);
+}
+.navigation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+}
+.arrows {
+  display: flex;
+  gap: 12px;
+}
+.arrows button {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+  background: none;
+  font-size: 13px;
+  color: var(--color-work-foreground);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-micro) var(--ease-out-expo),
+    opacity var(--duration-micro) var(--ease-out-expo);
+}
+.arrows button:hover:not(:disabled) {
+  border-color: var(--color-work-foreground);
+}
+.arrows button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-work-secondary);
+}
+.indicators button:focus-visible,
+.arrows button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .rail {
+    gap: 12px;
+    margin-top: 24px;
+    margin-right: -24px;
+    padding-right: 24px;
+    scroll-snap-type: x mandatory;
+    cursor: auto;
+  }
+  .card,
+  .card[data-state="active"],
+  .card[data-state="next"] {
+    flex-basis: 84vw;
+    height: auto;
+    padding: 22px 20px 20px;
+    scroll-snap-align: start;
+    transition: none;
+  }
+  .copy,
+  .card[data-state="active"] .copy,
+  .rail[data-measured] .copy {
+    width: auto;
+    transition: none;
+  }
+  .title {
+    transition: none;
+  }
+  .sector {
+    margin-top: 28px;
+  }
+  .card .title,
+  .card[data-state="active"] .title {
+    font-size: clamp(26px, 7vw, 36px);
+    color: var(--color-work-foreground);
+  }
+  .summary {
+    max-width: none;
+  }
+  .visual {
+    position: relative;
+    inset: auto;
+    order: 1;
+    width: calc(100% + 40px);
+    margin: 8px -20px 0;
+  }
+  .copy {
+    display: contents;
+  }
+  .spacer {
+    display: none;
+  }
+  .cta {
+    order: 2;
+    margin-top: 22px;
+  }
+  .tech {
+    order: 3;
+    margin-top: 18px;
+  }
+  .controls {
+    margin-top: 28px;
+    padding-top: 18px;
+  }
+  .hint {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rail {
+    scroll-behavior: auto;
+  }
+  .card,
+  .copy,
+  .title,
+  .dot,
+  .rail[data-measured] .visual {
+    transition: none;
+  }
+}
