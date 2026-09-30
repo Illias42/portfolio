@@ -1,22 +1,47 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { fontMono, fontSans, fontScript, fontSerif } from "@/_app/fonts";
 import { MotionProvider } from "@/_app/providers";
-import { siteConfig } from "@/shared/config";
+import { siteConfig, staticPalette } from "@/shared/config";
 
 import "@/_app/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: siteConfig.title,
+  metadataBase: new URL(siteConfig.url),
+  title: { default: siteConfig.title, template: `%s | ${siteConfig.name}` },
   description: siteConfig.description,
-  authors: [{ name: siteConfig.name }],
+  applicationName: siteConfig.name,
+  keywords: siteConfig.keywords,
+  authors: [{ name: siteConfig.name, url: siteConfig.linkedin }],
+  creator: siteConfig.name,
+  category: "technology",
+  alternates: { canonical: "/" },
+  formatDetection: { telephone: false, address: false, email: false },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
   openGraph: {
+    type: "profile",
+    url: "/",
+    siteName: siteConfig.name,
     title: siteConfig.title,
     description: siteConfig.description,
-    type: "website",
-    locale: "en_GB",
+    locale: siteConfig.locale,
+    firstName: "Illia",
+    lastName: "Kryvoshchenkov",
   },
-  twitter: { card: "summary", title: siteConfig.title, description: siteConfig.description },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: staticPalette.paper,
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children, modal }: LayoutProps<"/">) {
