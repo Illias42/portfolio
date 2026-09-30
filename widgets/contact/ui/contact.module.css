@@ -52,11 +52,10 @@
 }
 .statement {
   margin-top: clamp(20px, 2vw, 32px);
-  font-family: var(--font-serif);
   font-size: clamp(60px, 7.3vw, 136px);
-  font-weight: 400;
-  line-height: 0.86;
-  letter-spacing: -0.045em;
+  font-weight: var(--display-weight);
+  line-height: var(--display-leading);
+  letter-spacing: var(--display-tracking);
 }
 .mask {
   display: block;
@@ -79,14 +78,11 @@
 .script {
   width: max-content;
   font-family: var(--font-script);
-  font-size: clamp(60px, 6.3vw, 118px);
-  line-height: 0.95;
+  font-size: clamp(36px, 3.6vw, 66px);
+  line-height: 1.08;
   color: var(--color-umber);
-  transform: rotate(-9deg);
+  transform: rotate(-6deg);
   transform-origin: left top;
-}
-.tuck {
-  margin-inline: -0.14em -0.06em;
 }
 .scriptFirst,
 .scriptSecond {
@@ -264,7 +260,7 @@
     font-size: clamp(46px, 13.4vw, 64px);
   }
   .script {
-    font-size: clamp(48px, 13vw, 64px);
+    font-size: clamp(28px, 8vw, 40px);
   }
   .flourish {
     width: 150px;

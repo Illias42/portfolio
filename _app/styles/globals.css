@@ -52,6 +52,9 @@
   --section-pad-bottom: clamp(48px, 4.5vw, 72px);
   --section-head-gap: clamp(28px, 3vw, 44px);
   --text-statement: clamp(52px, 4.8vw, 88px);
+  --display-weight: 500;
+  --display-leading: 0.94;
+  --display-tracking: -0.055em;
 }
 
 @media (max-width: 760px) {
@@ -104,7 +107,6 @@
 
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, monospace;
-  --font-serif: var(--font-serif), ui-serif, Georgia, serif;
   --font-script: var(--font-script), cursive;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);

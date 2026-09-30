@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Herr_Von_Muellerhoff, Newsreader } from "next/font/google";
+import { Geist, Geist_Mono, Permanent_Marker } from "next/font/google";
 
 export const fontSans = Geist({
   subsets: ["latin"],
@@ -12,14 +12,7 @@ export const fontMono = Geist_Mono({
   display: "swap",
 });
 
-export const fontSerif = Newsreader({
-  subsets: ["latin"],
-  variable: "--font-serif",
-  axes: ["opsz"],
-  display: "swap",
-});
-
-export const fontScript = Herr_Von_Muellerhoff({
+export const fontScript = Permanent_Marker({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-script",

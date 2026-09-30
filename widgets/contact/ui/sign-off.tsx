@@ -33,9 +33,7 @@ export function SignOff() {
       viewport={{ once: true, amount: m.amount }}
     >
       <motion.p className={styles.script} variants={pen}>
-        <span className={styles.scriptFirst}>
-          Let<span className={styles.tuck}>’</span>s build something
-        </span>{" "}
+        <span className={styles.scriptFirst}>Let’s build something</span>{" "}
         <span className={styles.scriptSecond}>meaningful.</span>
       </motion.p>
       <svg className={styles.flourish} viewBox="0 0 260 80" fill="none" aria-hidden="true">

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 
-import { fontMono, fontSans, fontScript, fontSerif } from "@/_app/fonts";
+import { fontMono, fontSans, fontScript } from "@/_app/fonts";
 import { MotionProvider } from "@/_app/providers";
 import { siteConfig, staticPalette } from "@/shared/config";
 
@@ -48,7 +48,7 @@ export default function RootLayout({ children, modal }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${fontSans.variable} ${fontMono.variable} ${fontSerif.variable} ${fontScript.variable} h-full`}
+      className={`${fontSans.variable} ${fontMono.variable} ${fontScript.variable} h-full`}
     >
       <body className="flex min-h-full flex-col">
         <MotionProvider>
