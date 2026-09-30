@@ -46,6 +46,23 @@
   flex-basis: var(--w-active);
   cursor: default;
 }
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--color-work-card) 0%,
+    color-mix(in oklab, var(--color-work-card) 88%, transparent) 42%,
+    transparent 66%
+  );
+  transition: opacity var(--duration-rail) var(--ease-in-out-quart);
+}
+.card[data-state="active"]::after {
+  opacity: 0;
+}
 .card[data-state="next"] {
   flex-basis: var(--w-next);
 }
@@ -336,6 +353,9 @@
   .copy {
     display: contents;
   }
+  .card::after {
+    display: none;
+  }
   .spacer {
     display: none;
   }
@@ -360,6 +380,7 @@
     scroll-behavior: auto;
   }
   .card,
+  .card::after,
   .copy,
   .title,
   .dot,
