@@ -45,6 +45,20 @@ export function Experience() {
                     {role.current && <span className={styles.srOnly}> (current)</span>}
                   </p>
                   <p className={styles.summary}>{role.summary}</p>
+                  {role.openSource && (
+                    <div className={styles.openSource}>
+                      <p className={styles.openSourceLabel}>Open source</p>
+                      <p className={styles.openSourceText}>{role.openSource.summary}</p>
+                      <TextLink
+                        className={styles.openSourceLink}
+                        href={role.openSource.href}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {role.openSource.project}
+                      </TextLink>
+                    </div>
+                  )}
                   <p className={styles.domains}>{role.domains.join(", ")}</p>
                 </RevealItem>
               </li>

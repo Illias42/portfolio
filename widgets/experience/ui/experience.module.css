@@ -117,6 +117,29 @@
   color: var(--color-night-text);
   text-wrap: pretty;
 }
+.openSource {
+  margin-top: 18px;
+  padding-left: 16px;
+  border-left: 1px solid var(--color-sun-dim);
+}
+.openSourceLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-sun);
+}
+.openSourceText {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-night-text);
+  text-wrap: pretty;
+}
+.openSourceLink {
+  margin-top: 6px;
+  color: var(--color-white);
+}
 .domains {
   margin-top: 14px;
   font-family: var(--font-mono);

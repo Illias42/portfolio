@@ -45,6 +45,7 @@ export const capabilityGroups: readonly CapabilityGroup[] = [
       "GraphQL",
       "Microservices",
       "Stripe",
+      "PHP",
     ],
   },
   {
