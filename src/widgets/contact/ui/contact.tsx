@@ -1,14 +1,23 @@
 import Image from "next/image";
 
+import { sections } from "../../../shared/config";
+import {
+  ArrowIcon,
+  RevealGroup,
+  RevealItem,
+  RevealLine,
+  RevealRule,
+  SectionHeader,
+} from "../../../shared/ui";
 import { contactFocus, contactLinks } from "../model/links";
-import { RevealGroup, RevealItem, RevealLine, RevealRule } from "./reveal";
 import { SignOff } from "./sign-off";
 
 import styles from "./contact.module.css";
 
 export function Contact() {
+  const { id, label, index } = sections.contact;
   return (
-    <section id="contact" className={styles.block} aria-labelledby="contact-title">
+    <section id={id} className={styles.block} aria-labelledby="contact-title">
       <div className={styles.wall} aria-hidden="true">
         <Image
           src="/images/contact-palms.webp"
@@ -21,12 +30,7 @@ export function Contact() {
       </div>
 
       <div className={styles.section}>
-        <div className={styles.top}>
-          <p className={styles.label}>Contact</p>
-          <span className={styles.index} aria-hidden="true">
-            05
-          </span>
-        </div>
+        <SectionHeader label={label} index={index} />
 
         <div className={styles.layout}>
           <div className={styles.intro}>
@@ -64,14 +68,10 @@ export function Contact() {
                     <RevealItem className={styles.linkInner}>
                       <span className={styles.linkLabel}>{link.label}</span>
                       <span className={styles.srOnly}>, {link.destination}</span>
-                      <svg
+                      <ArrowIcon
+                        direction={link.download ? "down" : "up-right"}
                         className={styles.arrow}
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path d="M3 13 13 3M5 3h8v8" />
-                      </svg>
+                      />
                     </RevealItem>
                     <RevealRule className={styles.rule} />
                     <span className={styles.ruleActive} aria-hidden="true" />

@@ -115,6 +115,13 @@ function blocked(
   return false;
 }
 
+function outside(x: number, y: number, registry: LabelRegistry, width: number, height: number) {
+  const b = registry.bounds;
+  return (
+    x < (b?.left ?? 0) || x > (b?.right ?? width) || y < (b?.top ?? 0) || y > (b?.bottom ?? height)
+  );
+}
+
 function candidates(dx: number, dy: number): ReadonlyArray<readonly [number, number]> {
   return dx === 0
     ? [
@@ -129,11 +136,14 @@ function candidates(dx: number, dy: number): ReadonlyArray<readonly [number, num
       ];
 }
 
+/** Screen position of the anchor for a leader direction: leaders pointing away from the offset
+ * attach to the mirrored point, so each candidate is tested where it would actually be drawn. */
+type AnchorAt = (dy: number) => readonly [x: number, y: number, depth: number];
+
 function orient(
   registry: LabelRegistry,
   element: HTMLElement,
-  x: number,
-  y: number,
+  at: AnchorAt,
   width: number,
   height: number,
 ): number {
@@ -144,6 +154,8 @@ function orient(
   const fits = (index: number, margin: number) => {
     const option = options[index];
     if (!option) return false;
+    const [x, y] = at(option[1]);
+    if (outside(x, y, registry, width, height)) return false;
     return !blocked(textRect(x, y, option[0], option[1], w, h), registry, width, height, margin);
   };
   const held = current === undefined ? -1 : Number(current);
@@ -201,27 +213,27 @@ export function useLabelAnchors(
     placedCount = 0;
     const frameClock = performance.now();
     registry.noteCanvasSize(size.width, size.height, frameClock);
-    const b = registry.bounds;
     for (const anchor of anchors) {
       const element = registry.elements.get(anchor.id);
       const object = anchor.object();
       if (!element || !object) continue;
       object.updateWorldMatrix(true, false);
       const [ox, oy, oz] = anchor.offset ?? [0, 0, 0];
-      point.set(ox, oy, oz).applyMatrix4(object.matrixWorld).project(camera);
-      let x = (point.x * 0.5 + 0.5) * size.width;
-      let y = (-point.y * 0.5 + 0.5) * size.height;
-      const offscreen =
-        point.z > 1 ||
-        x < (b?.left ?? 0) ||
-        x > (b?.right ?? size.width) ||
-        y < (b?.top ?? 0) ||
-        y > (b?.bottom ?? size.height);
+      const project = (mirror: boolean): readonly [number, number, number] => {
+        point
+          .set(ox, mirror ? -oy : oy, oz)
+          .applyMatrix4(object.matrixWorld)
+          .project(camera);
+        return [(point.x * 0.5 + 0.5) * size.width, (-point.y * 0.5 + 0.5) * size.height, point.z];
+      };
+      const direct = project(false);
+      const mirrored = oy === 0 ? direct : project(true);
+      const at: AnchorAt = (dy) => (oy * dy > 0 ? mirrored : direct);
       const last = element.dataset;
       const current = last.orient === undefined ? -1 : Number(last.orient);
       const settling = frameClock - registry.changedAt < SETTLE_MS;
       let target = current;
-      if (!settling) target = orient(registry, element, x, y, size.width, size.height);
+      if (!settling) target = orient(registry, element, at, size.width, size.height);
       else if (current < 0) target = -1;
       let swapping = last.swapAt !== undefined;
       if (target >= 0 && target !== current && !swapping) {
@@ -247,11 +259,8 @@ export function useLabelAnchors(
         shownSide >= 0
           ? (candidates(Number(last.dx ?? 0), Number(last.dy ?? 0))[shownSide] ?? [0, 0])
           : [0, 0];
-      if (oy * cy > 0) {
-        point.set(ox, -oy, oz).applyMatrix4(object.matrixWorld).project(camera);
-        x = (point.x * 0.5 + 0.5) * size.width;
-        y = (-point.y * 0.5 + 0.5) * size.height;
-      }
+      const [x, y, z] = shownSide >= 0 && oy * cy > 0 ? mirrored : direct;
+      const offscreen = z > 1 || outside(x, y, registry, size.width, size.height);
       if (shownSide >= 0 && target >= 0 && !offscreen) {
         place(textRect(x, y, cx, cy, Number(last.tw ?? 0), Number(last.th ?? 0)));
       }

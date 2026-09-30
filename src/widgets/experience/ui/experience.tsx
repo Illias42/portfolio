@@ -1,19 +1,19 @@
-import { siteConfig } from "../../../shared/config";
+import { sections, siteConfig } from "../../../shared/config";
+import { RevealGroup, RevealItem, RevealRule, SectionHeader, TextLink } from "../../../shared/ui";
 import { roles } from "../model/roles";
-import { RevealGroup, RevealItem, RevealMarker, RevealRule } from "./reveal";
+import { RevealMarker } from "./reveal";
 import { SeaCanvas } from "./sea-canvas";
 
 import styles from "./experience.module.css";
 
 export function Experience() {
+  const { id, label, index } = sections.experience;
   return (
-    <section id="experience" className={styles.block} aria-labelledby="experience-title">
+    <section id={id} className={styles.block} aria-labelledby="experience-title">
       <SeaCanvas className={styles.sea} />
       <div className={styles.section}>
+        <SectionHeader label={label} index={index} />
         <RevealGroup className={styles.intro}>
-          <RevealItem>
-            <p className={styles.label}>Experience</p>
-          </RevealItem>
           <RevealItem>
             <h2 id="experience-title" className={styles.statement}>
               <span className={styles.line}>
@@ -27,7 +27,7 @@ export function Experience() {
         </RevealGroup>
 
         <RevealGroup className={styles.timeline}>
-          <RevealRule className={styles.rule} />
+          <RevealRule className={styles.rule} axis="y" />
           <ol className={styles.roles}>
             {roles.map((role) => (
               <li key={role.id} className={styles.role}>
@@ -51,13 +51,9 @@ export function Experience() {
 
         <RevealGroup className={styles.footer}>
           <RevealItem>
-            <a className={styles.cv} href={siteConfig.cv} download>
-              Download CV
-              <span className={styles.cvMeta}>PDF</span>
-              <span className={styles.cvArrow} aria-hidden="true">
-                ↓
-              </span>
-            </a>
+            <TextLink className={styles.cv} href={siteConfig.cv} download arrow="down">
+              Download CV <span className={styles.cvMeta}>PDF</span>
+            </TextLink>
           </RevealItem>
         </RevealGroup>
       </div>

@@ -1,8 +1,3 @@
 export { siteConfig } from "./site";
-export {
-  capabilitiesMotion,
-  caseMotion,
-  contactMotion,
-  experienceMotion,
-  heroMotion,
-} from "./motion";
+export { caseMotion, contactMotion, heroMotion, revealMotion } from "./motion";
+export { sectionOrder, sections } from "./sections";

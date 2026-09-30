@@ -3,7 +3,7 @@
 import { motion, type Variants } from "motion/react";
 import type { ReactNode } from "react";
 
-import { contactMotion as m } from "../../../shared/config";
+import { revealMotion as m } from "../config";
 
 const group: Variants = {
   hidden: {},
@@ -20,9 +20,14 @@ const line: Variants = {
   show: { y: 0, transition: { duration: m.rise, ease: m.ease } },
 };
 
-const rule: Variants = {
+const ruleX: Variants = {
   hidden: { scaleX: 0 },
   show: { scaleX: 1, transition: { duration: m.rule, ease: m.ease } },
+};
+
+const ruleY: Variants = {
+  hidden: { scaleY: 0 },
+  show: { scaleY: 1, transition: { duration: m.rule, ease: m.ease } },
 };
 
 interface Props {
@@ -30,6 +35,7 @@ interface Props {
   className?: string;
 }
 
+/** Scroll-triggered stagger container shared by every homepage section. */
 export function RevealGroup({ children, className }: Props) {
   return (
     <motion.div
@@ -52,6 +58,7 @@ export function RevealItem({ children, className }: Props) {
   );
 }
 
+/** A line of display type rising out of a clipping mask. */
 export function RevealLine({ children, className }: Props) {
   return (
     <motion.span className={className} variants={line}>
@@ -60,6 +67,8 @@ export function RevealLine({ children, className }: Props) {
   );
 }
 
-export function RevealRule({ className }: Props) {
-  return <motion.span className={className} variants={rule} aria-hidden="true" />;
+export function RevealRule({ className, axis = "x" }: Props & { axis?: "x" | "y" }) {
+  return (
+    <motion.span className={className} variants={axis === "x" ? ruleX : ruleY} aria-hidden="true" />
+  );
 }

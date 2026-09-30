@@ -4,35 +4,30 @@
   overflow-x: clip;
 }
 .section {
-  padding: 40px 5.8% 64px;
-  max-width: 1760px;
+  max-width: var(--page-max);
   margin-inline: auto;
-  scroll-margin-top: 30px;
+  padding: var(--section-pad-top) var(--page-gutter) var(--section-pad-bottom);
 }
 .intro {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 20px 40px;
+  margin-top: var(--section-head-gap);
   padding-bottom: 28px;
   border-bottom: 1px solid var(--color-line);
 }
-.label,
-.date {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  color: var(--color-work-secondary);
-}
-.label {
-  text-transform: uppercase;
-}
 .statement {
-  margin-top: 18px;
-  max-width: 30ch;
-  font-size: clamp(30px, 3.2vw, 50px);
-  font-weight: 500;
-  line-height: 1.05;
-  letter-spacing: -0.045em;
+  font-family: var(--font-serif);
+  font-size: var(--text-statement);
+  font-weight: 350;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+.line {
+  display: block;
+}
+.soft {
+  color: var(--color-work-secondary);
 }
 .introAside {
   display: flex;
@@ -42,41 +37,44 @@
 }
 .description {
   max-width: 340px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.65;
   color: var(--color-work-secondary);
-  font-size: 17px;
-  line-height: 1.45;
-  letter-spacing: -0.01em;
+  text-wrap: pretty;
 }
 .date {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--color-work-secondary);
   white-space: nowrap;
   padding-top: 3px;
 }
 @media (min-width: 961px) {
   .intro {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
     align-items: end;
   }
   .introAside {
-    padding-bottom: 6px;
+    padding-bottom: 8px;
   }
 }
 @media (max-width: 760px) {
-  .section {
-    padding: 28px 24px 48px;
-  }
   .intro {
     gap: 16px;
     padding-bottom: 22px;
   }
-  .label,
-  .date {
-    font-size: 10px;
-  }
   .statement {
-    margin-top: 14px;
-    font-size: clamp(28px, 8vw, 40px);
+    font-size: clamp(42px, 11.5vw, 56px);
+  }
+  .line {
+    display: inline;
   }
   .description {
-    font-size: 15px;
+    font-size: 13px;
+  }
+  .date {
+    font-size: 11px;
   }
 }

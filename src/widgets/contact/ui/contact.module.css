@@ -1,5 +1,4 @@
 .block {
-  --gutter: 6.25%;
   --link-ease: var(--ease-out-expo);
 
   position: relative;
@@ -24,51 +23,18 @@
   display: flex;
   flex-direction: column;
   min-height: max(680px, min(100svh, 56.25vw));
-  max-width: 1760px;
+  max-width: var(--page-max);
   margin-inline: auto;
-  padding: clamp(40px, 3.5vw, 56px) var(--gutter) clamp(56px, 4.8vw, 80px);
+  padding: var(--section-pad-top) var(--page-gutter) clamp(56px, 4.8vw, 80px);
+  --section-line: var(--color-dune-line);
 }
 
-.top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-.label,
-.index,
 .eyebrow,
 .number,
 .linkLabel,
 .focus {
   font-family: var(--font-mono);
   text-transform: uppercase;
-}
-.label {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 13px;
-  letter-spacing: 0.1em;
-}
-.label::after,
-.index::before {
-  content: "";
-  height: 1px;
-  background: var(--color-dune-line);
-}
-.label::after {
-  width: clamp(80px, 18vw, 300px);
-}
-.index {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  letter-spacing: 0.1em;
-}
-.index::before {
-  width: clamp(40px, 5vw, 82px);
 }
 
 .layout {
@@ -174,11 +140,7 @@
   transition: transform var(--duration-link) var(--link-ease);
 }
 .arrow {
-  flex: none;
-  width: 16px;
-  height: 16px;
-  stroke: currentColor;
-  stroke-width: 1.4;
+  font-size: 16px;
   transition: transform var(--duration-link) var(--link-ease);
 }
 .rule,
@@ -205,6 +167,10 @@
 .link:hover .arrow,
 .link:focus-visible .arrow {
   transform: translate(3px, -3px);
+}
+.link[download]:hover .arrow,
+.link[download]:focus-visible .arrow {
+  transform: translateY(3px);
 }
 .link:hover .ruleActive,
 .link:focus-visible .ruleActive {
@@ -260,7 +226,6 @@
 
 @media (max-width: 1024px) {
   .block {
-    --gutter: 24px;
     --wall-h: 0.75;
   }
   .wall {
@@ -291,10 +256,6 @@
 @media (max-width: 560px) {
   .block {
     --wall-h: 1.33;
-  }
-  .label,
-  .index {
-    font-size: 11px;
   }
   .eyebrow {
     font-size: 11px;

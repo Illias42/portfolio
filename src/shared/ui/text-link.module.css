@@ -1,0 +1,67 @@
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  width: fit-content;
+  padding: 6px 0 9px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+.link::after,
+.rule {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  transform-origin: left center;
+}
+.link::after {
+  background: currentColor;
+  opacity: 0.35;
+}
+.rule {
+  background: currentColor;
+  transform: scaleX(0);
+  transition: transform var(--duration-link) var(--ease-out-expo);
+}
+.arrow {
+  font-size: 12px;
+  transition: transform var(--duration-link) var(--ease-out-expo);
+}
+.link:hover .rule,
+.link:focus-visible .rule {
+  transform: scaleX(1);
+}
+.link[data-arrow="up-right"]:hover .arrow {
+  transform: translate(2px, -2px);
+}
+.link[data-arrow="down"]:hover .arrow {
+  transform: translateY(2px);
+}
+.link[data-arrow="right"]:hover .arrow {
+  transform: translateX(3px);
+}
+.link[data-arrow="left"]:hover .arrow {
+  transform: translateX(-3px);
+}
+.link:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 5px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rule,
+  .arrow {
+    transition: none;
+  }
+  .link:hover .arrow {
+    transform: none;
+  }
+}

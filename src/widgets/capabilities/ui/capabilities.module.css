@@ -1,6 +1,4 @@
 .block {
-  --gutter-left: 8%;
-  --gutter-right: 4%;
   --rule: 1px solid var(--color-line);
 
   position: relative;
@@ -31,20 +29,11 @@
 }
 
 .section {
-  max-width: 1760px;
+  max-width: var(--page-max);
   margin-inline: auto;
-  padding: clamp(40px, 3.5vw, 56px) var(--gutter-right) clamp(44px, 4vw, 64px) var(--gutter-left);
+  padding: var(--section-pad-top) var(--page-gutter) var(--section-pad-bottom);
 }
 
-.top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding-right: calc(var(--gutter-left) - var(--gutter-right));
-}
-.label,
-.index,
 .number,
 .description,
 .items,
@@ -52,48 +41,24 @@
 .next {
   font-family: var(--font-mono);
 }
-.label {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 13px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.label::after,
-.index::before,
 .number::after {
   content: "";
   height: 1px;
   background: var(--color-line);
-}
-.label::after {
-  width: clamp(80px, 14vw, 240px);
-}
-.index {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  font-size: 14px;
-  letter-spacing: 0.1em;
-}
-.index::before {
-  width: 58px;
-  background: var(--color-foreground);
 }
 
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 29rem) minmax(0, 1fr);
   column-gap: clamp(32px, 3vw, 48px);
-  margin-top: clamp(28px, 3vw, 44px);
+  margin-top: var(--section-head-gap);
 }
 
 .statement {
   font-family: var(--font-serif);
-  font-size: clamp(56px, 4.8vw, 88px);
+  font-size: var(--text-statement);
   font-weight: 350;
-  line-height: 0.93;
+  line-height: 0.95;
   letter-spacing: -0.035em;
 }
 .line {
@@ -184,10 +149,6 @@
 }
 
 @media (max-width: 1360px) {
-  .block {
-    --gutter-left: 6%;
-    --gutter-right: 6%;
-  }
   .layout {
     grid-template-columns: minmax(0, 1fr);
     row-gap: 32px;
@@ -217,26 +178,15 @@
 @media (max-width: 760px) {
   .block {
     --rocks-w: 80vw;
-    --gutter-left: 24px;
-    --gutter-right: 24px;
   }
   .section {
     padding-bottom: calc(var(--rocks-w) * 0.42);
-  }
-  .label {
-    font-size: 11px;
-  }
-  .index {
-    font-size: 12px;
-  }
-  .index::before {
-    width: 36px;
   }
   .intro {
     grid-template-columns: minmax(0, 1fr);
   }
   .statement {
-    font-size: clamp(46px, 13vw, 60px);
+    font-size: clamp(42px, 11.5vw, 56px);
   }
   .description {
     font-size: 14px;

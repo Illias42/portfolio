@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useRef, type MouseEvent } from "react";
 
 import type { Project } from "../../../entities/project";
+import { TextLink } from "../../../shared/ui";
 import { caseTransition } from "../model/case-transition";
 import { RealtimeRouteScene } from "./mobility-canvas";
 import { NetworkCanvas } from "./network-canvas";
@@ -67,8 +67,11 @@ export function ProjectCard({
           type="button"
           className={styles.select}
           aria-label={`Show project ${project.number}: ${project.sector}`}
-          onClick={() => {
+          onClick={(event) => {
             onSelect();
+            // Hand focus to the case link only for keyboard activation (detail 0); a mouse click
+            // would otherwise light up its focus ring.
+            if (event.detail !== 0) return;
             requestAnimationFrame(() =>
               document.getElementById(triggerId)?.focus({ preventScroll: true }),
             );
@@ -92,7 +95,7 @@ export function ProjectCard({
           {project.summary}
         </p>
         <div className={styles.spacer} />
-        <Link
+        <TextLink
           id={triggerId}
           className={styles.cta}
           data-label-guard
@@ -101,8 +104,8 @@ export function ProjectCard({
           draggable={false}
           onClick={openCase}
         >
-          View case <span aria-hidden="true">↗</span>
-        </Link>
+          View case
+        </TextLink>
         <p className={styles.tech} data-label-guard>
           {project.tech.join(" / ")}
         </p>

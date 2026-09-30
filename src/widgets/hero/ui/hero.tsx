@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { siteConfig } from "../../../shared/config";
+import { sectionOrder, sections, siteConfig } from "../../../shared/config";
+import { ArrowIcon, TextLink } from "../../../shared/ui";
 import { HeroMotion } from "./hero-motion";
 
 import styles from "./hero.module.css";
@@ -30,14 +31,11 @@ export function Hero() {
           IK
         </Link>
         <nav className={styles.nav} aria-label="Main navigation">
-          <a href={siteConfig.cv} aria-label="Work experience in my CV">
-            Work
-          </a>
-          <a href={siteConfig.linkedin} aria-label="About me on LinkedIn">
-            About
-          </a>
-          <a href="#hero-stack">Stack</a>
-          <a href={siteConfig.email}>Contact</a>
+          {sectionOrder.map((section) => (
+            <a key={section.id} href={`#${section.id}`}>
+              {section.nav}
+            </a>
+          ))}
         </nav>
       </header>
       <div className={styles.sideLabel}>ILLIA KRYVOSHCHENKOV</div>
@@ -54,7 +52,7 @@ export function Hero() {
           React interfaces. Node.js services. React Native apps.
           <br className={styles.desktopBreak} /> I build and ship products end to end.
         </p>
-        <p id="hero-stack" className={styles.stack}>
+        <p className={styles.stack}>
           TYPESCRIPT <span>/</span> REACT <span>/</span> NEXT.JS <span>/</span> NODE.JS{" "}
           <span>/</span> NESTJS
         </p>
@@ -63,18 +61,16 @@ export function Hero() {
         <p className={styles.locationLabel}>BASED IN</p>
         <p className={styles.locationName}>Berlin, Germany</p>
         <span className={styles.availability}>Open to relocation</span>
-        <a href={siteConfig.email}>
-          Let’s talk <span aria-hidden="true">↗</span>
-        </a>
+        <TextLink className={styles.talk} href={siteConfig.email}>
+          Let’s talk
+        </TextLink>
       </div>
       <div className={styles.scrim} aria-hidden="true" />
-      <a className={styles.explore} href={siteConfig.cv}>
-        <span className={styles.arrow} aria-hidden="true">
-          ↓
+      <a className={styles.explore} href={`#${sections.work.id}`}>
+        <span className={styles.arrow}>
+          <ArrowIcon direction="down" />
         </span>
-        <span>
-          EXPLORE MY EXPERIENCE <span className={styles.pdf}> / CV</span>
-        </span>
+        <span>Explore selected work</span>
       </a>
       <p className={styles.signature}>
         ILLIA KRYVOSHCHENKOV<span>WEB / MOBILE / CLOUD</span>

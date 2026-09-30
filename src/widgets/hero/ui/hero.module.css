@@ -31,7 +31,7 @@
 }
 .header {
   position: absolute;
-  inset: 28px 3.5% auto;
+  inset: 28px var(--page-gutter) auto;
   display: flex;
   align-items: center;
   gap: 40px;
@@ -58,18 +58,28 @@
   font-family: var(--font-mono);
 }
 .nav a {
-  font-size: 10px;
-  letter-spacing: 0.22em;
+  position: relative;
+  font-size: 11px;
+  letter-spacing: 0.14em;
   text-decoration: none;
   text-transform: uppercase;
   padding: 12px 0;
 }
-.sunIcon {
-  flex-shrink: 0;
-  transition: transform var(--duration-micro) var(--ease-out-expo);
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-link) var(--ease-out-expo);
 }
-.sunIcon:hover {
-  transform: rotate(45deg);
+.nav a:hover::after,
+.nav a:focus-visible::after {
+  transform: scaleX(1);
 }
 .sideLabel {
   position: absolute;
@@ -91,7 +101,7 @@
 .intro {
   position: relative;
   padding-top: clamp(165px, 23svh, 260px);
-  margin-left: 8.5%;
+  margin-left: var(--page-gutter);
   width: 57%;
   z-index: 2;
 }
@@ -139,19 +149,11 @@
 }
 .location {
   position: absolute;
-  right: 4%;
+  right: var(--page-gutter);
   top: 24%;
   z-index: 2;
   font-size: 9px;
   letter-spacing: 0.12em;
-}
-.smallSun {
-  display: block;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--color-sun);
-  margin-bottom: 23px;
 }
 .location p {
   margin-bottom: 11px;
@@ -166,14 +168,15 @@
 .explore {
   position: absolute;
   bottom: 12%;
-  left: 8.5%;
+  left: var(--page-gutter);
   display: flex;
   align-items: center;
   gap: 19px;
   color: var(--color-white);
   text-decoration: none;
-  font-size: 9px;
-  letter-spacing: 0.15em;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   z-index: 2;
 }
 .arrow {
@@ -183,15 +186,12 @@
   height: 45px;
   border: 1px solid var(--color-warm);
   border-radius: 50%;
-  font-size: 21px;
-}
-.pdf {
-  opacity: 0.7;
+  font-size: 16px;
 }
 .signature {
   position: absolute;
-  left: 8.5%;
-  right: 4%;
+  left: var(--page-gutter);
+  right: var(--page-gutter);
   bottom: 27px;
   z-index: 2;
   display: flex;
@@ -216,13 +216,9 @@
   outline: 2px solid currentColor;
   outline-offset: 6px;
 }
-.nav a:hover {
-  text-decoration: underline;
-  text-underline-offset: 6px;
-}
 @media (max-width: 1100px) and (min-width: 761px) {
   .intro {
-    margin-left: 8%;
+    margin-left: var(--page-gutter);
     width: 70%;
   }
   .intro h1 {
@@ -256,10 +252,6 @@
   .nav a:nth-child(2),
   .nav a:nth-child(3) {
     display: none;
-  }
-  .sunIcon {
-    width: 29px;
-    height: 29px;
   }
   .sideLabel {
     display: none;
@@ -325,11 +317,6 @@
   .availability {
     font-size: 7px;
   }
-  .smallSun {
-    width: 23px;
-    height: 23px;
-    margin-bottom: 15px;
-  }
   .explore {
     left: 24px;
     bottom: 66px;
@@ -346,7 +333,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sunIcon {
+  .nav a::after {
     transition: none;
   }
 }
@@ -372,7 +359,7 @@
   }
   .intro {
     padding-top: clamp(165px, 24svh, 250px);
-    margin-left: 7.8%;
+    margin-left: var(--page-gutter);
     width: 55%;
   }
   .intro h1 {
@@ -397,10 +384,11 @@
     );
   }
   .explore {
-    left: 7.8%;
+    left: var(--page-gutter);
   }
   .signature {
-    left: 7.8%;
+    left: var(--page-gutter);
+    right: var(--page-gutter);
   }
   .location {
     top: 27%;
@@ -436,26 +424,8 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-.location > a {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  width: fit-content;
-  margin-top: 20px;
-  font-size: 11px;
-  text-underline-offset: 5px;
-}
-.location > a span {
-  font-size: 15px;
-  transition: transform var(--duration-micro) var(--ease-out-expo);
-}
-.location > a:hover span {
-  transform: translate(2px, -2px);
-}
-@media (prefers-reduced-motion: reduce) {
-  .location > a:hover span {
-    transform: none;
-  }
+.location .talk {
+  margin-top: 18px;
 }
 @media (max-width: 760px) {
   .location {
@@ -467,8 +437,8 @@
   .availability {
     color: var(--color-warm);
   }
-  .location > a {
-    margin-top: 14px;
+  .location .talk {
+    margin-top: 12px;
   }
   .eyebrow {
     letter-spacing: 0.17em;

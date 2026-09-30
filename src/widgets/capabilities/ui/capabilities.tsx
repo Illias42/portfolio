@@ -1,13 +1,15 @@
 import Image from "next/image";
 
+import { sections } from "../../../shared/config";
+import { RevealGroup, RevealItem, SectionHeader } from "../../../shared/ui";
 import { capabilityFocus, capabilityGroups } from "../model/capabilities";
-import { RevealGroup, RevealItem } from "./reveal";
 
 import styles from "./capabilities.module.css";
 
 export function Capabilities() {
+  const { id, label, index } = sections.capabilities;
   return (
-    <section id="capabilities" className={styles.block} aria-labelledby="capabilities-title">
+    <section id={id} className={styles.block} aria-labelledby="capabilities-title">
       <div className={styles.rocks} aria-hidden="true">
         <Image
           src="/images/capabilities-rocks-clean.webp"
@@ -20,12 +22,7 @@ export function Capabilities() {
       </div>
 
       <div className={styles.section}>
-        <div className={styles.top}>
-          <p className={styles.label}>Capabilities</p>
-          <span className={styles.index} aria-hidden="true">
-            03
-          </span>
-        </div>
+        <SectionHeader label={label} index={index} />
 
         <div className={styles.layout}>
           <RevealGroup className={styles.intro}>

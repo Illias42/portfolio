@@ -22,30 +22,20 @@ export const caseMotion = {
   ease: ease.inOutQuart,
 } as const;
 
-export const experienceMotion = {
-  ease: ease.outExpo,
-  reveal: 0.9,
-  stagger: 0.09,
-  rule: 1.6,
-  lift: 18,
-  amount: 0.25,
-} as const;
-
-export const capabilitiesMotion = {
-  ease: ease.outExpo,
-  reveal: 0.9,
-  stagger: 0.08,
-  lift: 14,
-  amount: 0.3,
-} as const;
-
-export const contactMotion = {
+/** One reveal language for every homepage section: stagger, lift, line rise and hairline draw. */
+export const revealMotion = {
   ease: ease.outExpo,
   reveal: 0.9,
   stagger: 0.09,
   lift: 16,
   rise: 1.1,
-  rule: 1.2,
+  rule: 1.4,
+  amount: 0.3,
+} as const;
+
+/** The handwritten sign-off in Contact. */
+export const contactMotion = {
+  ease: ease.outExpo,
   write: 1.9,
   writeDelay: 0.6,
   writeEase: ease.write,

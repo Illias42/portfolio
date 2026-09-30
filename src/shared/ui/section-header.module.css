@@ -1,0 +1,39 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.label,
+.index {
+  display: flex;
+  align-items: center;
+}
+.label {
+  gap: 16px;
+}
+.index {
+  gap: 18px;
+}
+.label::after,
+.index::before {
+  content: "";
+  height: 1px;
+  background: var(--section-line, var(--color-line));
+}
+.label::after {
+  width: clamp(80px, 16vw, 280px);
+}
+.index::before {
+  width: clamp(36px, 4vw, 64px);
+  background: currentColor;
+}
+@media (max-width: 760px) {
+  .header {
+    font-size: 11px;
+  }
+}

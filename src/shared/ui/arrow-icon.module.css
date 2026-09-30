@@ -1,0 +1,8 @@
+.arrow {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}

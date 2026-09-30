@@ -5,6 +5,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from
 
 import { projects } from "../../../entities/project";
 import { useMediaQuery } from "../../../shared/lib";
+import { ArrowIcon } from "../../../shared/ui";
 import { railConfig } from "../config/rail";
 import { useRailDrag, useRailKeys, useRailWheel, type RailKey } from "../lib/rail-input";
 import { useCaseOpen } from "../model/case-transition";
@@ -176,7 +177,7 @@ export function WorkRail() {
               disabled={active === 0}
               onClick={() => select(active - 1)}
             >
-              ←
+              <ArrowIcon direction="left" />
             </button>
             <button
               type="button"
@@ -184,7 +185,7 @@ export function WorkRail() {
               disabled={active === last}
               onClick={() => select(active + 1)}
             >
-              →
+              <ArrowIcon direction="right" />
             </button>
           </div>
           <p className={styles.hint}>Scroll / drag / use arrows</p>
