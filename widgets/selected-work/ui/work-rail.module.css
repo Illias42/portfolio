@@ -214,6 +214,14 @@
     transition: transform var(--duration-rail) var(--ease-in-out-quart);
   }
 }
+@media (min-width: 761px) and (hover: hover) {
+  .rail:hover .card[data-state="active"]:not(:hover) .visual {
+    --card-settled: calc(var(--rail-inner) * var(--f-active-compressed));
+  }
+  .card:not([data-state="active"]):hover .visual {
+    --card-settled: calc(var(--rail-inner) * var(--f-hover));
+  }
+}
 
 .controls {
   display: flex;

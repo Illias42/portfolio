@@ -25,6 +25,8 @@ const railVars: CSSProperties & Record<`--${string}`, string> = {
   "--f-active": `${widths.active / 100}`,
   "--f-next": `${widths.next / 100}`,
   "--f-rest": `${widths.rest / 100}`,
+  "--f-hover": `${widths.hover / 100}`,
+  "--f-active-compressed": `${widths.activeCompressed / 100}`,
   "--rail-gap": `${gap}px`,
 };
 

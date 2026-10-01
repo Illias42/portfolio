@@ -7,7 +7,7 @@ export const projects: readonly Project[] = [
     sector: "Telecom",
     period: "2024—NOW",
     headline: ["Infrastructure", "behind ~1M users."],
-    summary: "Backend services for eSIM, phone number provisioning, call routing and VPN.",
+    summary: "NestJS backend for eSIM, phone number provisioning, call routing and VPN.",
     tech: ["Node.js", "NestJS", "SIP", "VoIP", "PostgreSQL", "Redis"],
     role: "Full Stack Engineer",
     company: "Kevych Solutions",

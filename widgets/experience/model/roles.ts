@@ -18,13 +18,13 @@ export const roles: readonly Role[] = [
     title: "Full Stack Engineer",
     domains: ["Telecom", "Mobility", "IoT", "Healthcare", "ERP"],
     summary:
-      "Node.js and NestJS services across telecom, mobility and IoT, plus React and Next.js admin dashboards and partners pages. Architecture standards, production delivery and backend mentoring.",
-    openSource: {
-      project: "GrowthBook PHP SDK",
-      href: "https://github.com/growthbook/growthbook-php",
-      summary:
-        "Remote evaluation, ETag caching, a tracking plugin system, sticky bucketing storage and the immutable 2.0 API for the official SDK.",
-    },
+      "Built backend services across telecom, mobility and IoT, plus React and Next.js admin dashboards and partners pages. Architecture standards, production delivery and backend mentoring.",
+    // openSource: {
+    //   project: "GrowthBook PHP SDK",
+    //   href: "https://github.com/growthbook/growthbook-php",
+    //   summary:
+    //     "Remote evaluation, ETag caching, a tracking plugin system, sticky bucketing storage and the immutable 2.0 API for the official SDK.",
+    // },
     current: true,
   },
   {
