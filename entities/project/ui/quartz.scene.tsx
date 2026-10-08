@@ -42,6 +42,7 @@ import {
 export interface QuartzPalette {
   pearl: Rgb01;
   amber: Rgb01;
+  sun: Rgb01;
   warm: Rgb01;
   fill: Rgb01;
   key: Rgb01;
@@ -217,8 +218,9 @@ function Crystal({ palette, compact, animate, variant, labelTargets }: Props) {
     () => ({
       body: tint(palette.pearl).lerp(new Color(1, 1, 1), stone.lift),
       amber: tint(palette.amber),
-      light: tint(palette.amber).lerp(new Color(1, 1, 1), 0.35),
-      glow: tint(palette.amber).lerp(tint(palette.warm), 0.35),
+      light: tint(palette.sun).lerp(new Color(1, 1, 1), stone.glowWhite),
+      sun: tint(palette.sun),
+      glow: tint(palette.sun).lerp(tint(palette.warm), 0.25),
       warm: tint(palette.warm),
       fill: tint(palette.fill),
       key: tint(palette.key).lerp(tint(palette.warm), 0.12),
@@ -246,7 +248,9 @@ function Crystal({ palette, compact, animate, variant, labelTargets }: Props) {
     quartzUniforms.uSmoke.value.copy(colors.smoke).lerp(colors.body, 0.12);
     quartzUniforms.uEarth.value.copy(colors.earth).lerp(colors.warm, 0.3);
     causticUniforms.uColor.value.copy(colors.glow);
-    fractures.forEach(({ uniforms }) => uniforms.uColor.value.copy(colors.light));
+    fractures.forEach(({ uniforms }) =>
+      uniforms.uColor.value.copy(colors.sun).lerp(colors.warm, stone.fractureWarmth),
+    );
   }, [colors]);
 
   useFrame((state) => {
@@ -292,6 +296,11 @@ function Crystal({ palette, compact, animate, variant, labelTargets }: Props) {
             ior={stone.ior}
             clearcoat={stone.clearcoat}
             clearcoatRoughness={stone.clearcoatRoughness}
+            sheen={stone.sheen}
+            sheenColor={colors.warm}
+            iridescence={stone.iridescence}
+            iridescenceIOR={1.3}
+            iridescenceThicknessRange={stone.iridescenceRange}
             attenuationColor={colors.body}
             attenuationDistance={stone.attenuationDistance}
             envMapIntensity={0.85}
@@ -333,7 +342,7 @@ function Crystal({ palette, compact, animate, variant, labelTargets }: Props) {
         <pointLight
           ref={coreLight}
           position={corePosition}
-          color={colors.amber}
+          color={colors.sun}
           intensity={core.intensity}
           distance={core.distance}
           decay={2}

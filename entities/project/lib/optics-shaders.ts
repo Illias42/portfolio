@@ -37,7 +37,8 @@ const glassShading = /* glsl */ `
   float scanG = exp(-scanD * scanD / ${f(scan.core * scan.core)})
     + 0.3 * exp(-scanD * scanD / ${f(scan.halo * scan.halo)});
   scanG *= uScanFade * ${f(scan.strength)} * mix(1.0, ${f(scan.edgeGain)}, fres);
-  outgoingLight += uScanColor * scanG;
+  outgoingLight = mix(outgoingLight, uScanColor, clamp(scanG * ${f(scan.tint)}, 0.0, 0.5))
+    + uScanColor * scanG * 0.25;
   diffuseColor.a = min(1.0, diffuseColor.a + scanG * 0.45);
 `;
 
@@ -79,6 +80,7 @@ export const beamFragment = /* glsl */ `
     float halo = exp(-u * u / ${f(scan.halo * scan.halo)});
     float ends = smoothstep(0.0, 0.28, vUv.y) * smoothstep(1.0, 0.62, vUv.y);
     float glow = (core * 0.7 + halo * 0.3) * ends * uScanFade * ${f(scan.beam.intensity)};
-    gl_FragColor = vec4(uScanColor * glow, 1.0);
+    vec3 hot = mix(uScanColor, vec3(1.0), core * ${f(scan.beam.hot)});
+    gl_FragColor = vec4(hot, clamp(glow * ${f(scan.beam.alpha)}, 0.0, 1.0));
   }
 `;

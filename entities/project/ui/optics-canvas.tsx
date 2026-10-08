@@ -57,6 +57,7 @@ export function OpticsCanvas({
       line: cssColorRgb("--color-work-secondary"),
       metal: cssColorRgb("--color-graphite-metal"),
       amber: cssColorRgb("--color-signal"),
+      sun: cssColorRgb("--color-sun"),
       key: cssColorRgb("--color-white"),
       fill: cssColorRgb("--color-haze"),
       warm: cssColorRgb("--color-warm"),

@@ -78,16 +78,6 @@ export const mobilityConfig = {
     halo: { scale: 4.6, opacity: 1, falloff: 1.5, inner: 7, pulse: 0.1, pulseSpeed: 1.4 },
     light: { intensity: 3.2, distance: 2.2, decay: 2 },
   },
-  pulses: {
-    count: 2,
-    speed: 0.07,
-    spread: 0.18,
-    length: 14,
-    hot: 0.35,
-    radiusScale: 1.22,
-    opacity: 1,
-  },
-  filament: { radiusScale: 0.34, white: 0.2 },
   trail: { length: 0.22, lead: 0.012, radiusScale: 1.12, opacity: 0.9, warmth: 0.25 },
   camera: {
     position: [0, 3.1, 7.7] as [number, number, number],

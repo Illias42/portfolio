@@ -16,7 +16,6 @@ import { mobilityConfig, type BeadFinish } from "../config/mobility";
 import { useLabelAnchors, type LabelAnchor } from "../lib/label-anchors";
 import type { LabelTargets } from "../lib/label-registry";
 import { laneCurves } from "../lib/mobility-lanes";
-import { LaneFilament, LanePulse } from "./lane-pulse.scene";
 
 type Rgb = readonly [number, number, number];
 export interface MobilityPalette {
@@ -255,7 +254,6 @@ function Lanes({ palette, animate, compact, variant, labelTargets }: Props) {
     }),
     [palette],
   );
-  const sun = useMemo(() => color(palette.sun), [palette]);
   const haloMaterial = useRef<ShaderMaterial>(null);
   const sunUniforms = useMemo(
     () => ({
@@ -354,29 +352,12 @@ function Lanes({ palette, animate, compact, variant, labelTargets }: Props) {
         />
       </Environment>
       <group ref={sculpture} scale={view.scale} position={[0, view.baseY, 0]}>
-        {visible.map(({ lane, index, curve }) =>
-          curve ? (
-            <group key={index}>
-              <mesh>
-                <tubeGeometry args={[curve, segments, lane.radius, 12, false]} />
-                <meshPhysicalMaterial {...cableFinish(lane.finish, palette, compact)} />
-              </mesh>
-              {lane.finish === "glass" && (
-                <LaneFilament curve={curve} radius={lane.radius} segments={segments} sun={sun} />
-              )}
-              {index !== heroLane && (
-                <LanePulse
-                  curve={curve}
-                  radius={lane.radius}
-                  index={index}
-                  segments={segments}
-                  sun={sun}
-                  animate={animate}
-                />
-              )}
-            </group>
-          ) : null,
-        )}
+        {visible.map(({ lane, index, curve }) => (
+          <mesh key={index}>
+            <tubeGeometry args={[curve, segments, lane.radius, 12, false]} />
+            <meshPhysicalMaterial {...cableFinish(lane.finish, palette, compact)} />
+          </mesh>
+        ))}
         {visibleBeads.map((bead) => (
           <mesh key={`${bead.lane}-${bead.t}`} position={laneCurves[bead.lane]?.getPointAt(bead.t)}>
             <sphereGeometry args={[bead.radius, 40, 24]} />

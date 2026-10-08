@@ -4,7 +4,6 @@ import { ContactShadows, Environment, Lightformer, RoundedBox } from "@react-thr
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useMemo, useRef, type RefObject } from "react";
 import {
-  AdditiveBlending,
   Color,
   Euler,
   MathUtils,
@@ -37,6 +36,7 @@ export interface OpticsPalette {
   line: Rgb01;
   metal: Rgb01;
   amber: Rgb01;
+  sun: Rgb01;
   key: Rgb01;
   fill: Rgb01;
   warm: Rgb01;
@@ -323,7 +323,7 @@ function GlassPlane({
       fragment.height + corners.padding[1] * 2,
     ] as const;
     const frame = spec.primary
-      ? cornersTexture(frameSize[0] / frameSize[1], corners.arm / frameSize[0], palette.line)
+      ? cornersTexture(frameSize[0] / frameSize[1], corners.arm / frameSize[0], palette.amber)
       : null;
     return { glyphs, width, frame, frameSize };
   }, [fragment, showFragment, palette, fontFamily, spec.primary]);
@@ -395,8 +395,8 @@ function Sculpture({ palette, compact, parallax, animate, variant, fontFamily }:
       glass: tint(palette.pearl).lerp(WHITE, 0.2).lerp(tint(palette.smoke), glass.smoke),
       metal: tint(palette.metal)
         .lerp(tint(palette.pearl), bench.lift)
-        .lerp(tint(palette.warm), 0.1),
-      amber: tint(palette.amber).lerp(tint(palette.warm), 0.3),
+        .lerp(tint(palette.sun), bench.gild),
+      amber: tint(palette.sun),
       key: tint(palette.key).lerp(tint(palette.warm), 0.1),
       fill: tint(palette.fill),
       warm: tint(palette.warm),
@@ -522,7 +522,6 @@ function Sculpture({ palette, compact, parallax, animate, variant, fontFamily }:
           vertexShader={beamVertex}
           fragmentShader={beamFragment}
           transparent
-          blending={AdditiveBlending}
           depthTest={false}
           depthWrite={false}
           toneMapped={false}

@@ -60,6 +60,7 @@ export function QuartzCanvas({
           ),
           pearl: cssColorRgb("--color-pearl-ivory"),
           amber: cssColorRgb("--color-signal"),
+          sun: cssColorRgb("--color-sun"),
           warm: cssColorRgb("--color-warm"),
           fill: cssColorRgb("--color-haze"),
           key: cssColorRgb("--color-white"),
