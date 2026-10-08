@@ -21,7 +21,6 @@ const railVars: CSSProperties & Record<`--${string}`, string> = {
   "--w-next": `${widths.next}%`,
   "--w-rest": `${widths.rest}%`,
   "--w-hover": `${widths.hover}%`,
-  // Unitless copies so copy columns can be sized from the measured rail width (see --rail-inner).
   "--f-active": `${widths.active / 100}`,
   "--f-next": `${widths.next / 100}`,
   "--f-rest": `${widths.rest / 100}`,

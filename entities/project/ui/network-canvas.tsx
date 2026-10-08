@@ -39,6 +39,8 @@ function readPalette(): NetworkPalette {
   return {
     ivory: cssColorRgb("--color-pearl-ivory"),
     ceramic: cssColorRgb("--color-ceramic"),
+    nacre: cssColorRgb("--color-nacre"),
+    rose: cssColorRgb("--color-pearl-rose"),
     glass: cssColorRgb("--color-smoked-glass"),
     metal: cssColorRgb("--color-graphite-metal"),
     graphite: cssColorRgb("--color-muted"),

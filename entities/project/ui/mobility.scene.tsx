@@ -1,6 +1,6 @@
 "use client";
 
-import { ContactShadows, Environment, Lightformer } from "@react-three/drei";
+import { Billboard, ContactShadows, Environment, Lightformer } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import {
@@ -16,6 +16,7 @@ import { mobilityConfig, type BeadFinish } from "../config/mobility";
 import { useLabelAnchors, type LabelAnchor } from "../lib/label-anchors";
 import type { LabelTargets } from "../lib/label-registry";
 import { laneCurves } from "../lib/mobility-lanes";
+import { LaneFilament, LanePulse } from "./lane-pulse.scene";
 
 type Rgb = readonly [number, number, number];
 export interface MobilityPalette {
@@ -23,6 +24,7 @@ export interface MobilityPalette {
   metal: Rgb;
   glass: Rgb;
   amber: Rgb;
+  sun: Rgb;
   accent: Rgb;
   warm: Rgb;
   fill: Rgb;
@@ -90,19 +92,24 @@ function cableFinish(
   if (finish === "glass") return glassFinish(palette, compact);
   if (finish === "satin") {
     return {
-      color: color(palette.metal).lerp(color(palette.pearl), 0.82),
-      roughness: 0.3,
-      metalness: 0.5,
-      clearcoat: 0.15,
-      clearcoatRoughness: 0.3,
+      color: color(palette.pearl).lerp(color(palette.sun), 0.22),
+      roughness: 0.22,
+      metalness: 0.35,
+      clearcoat: 0.7,
+      clearcoatRoughness: 0.12,
     };
   }
   return {
     color: color(palette.pearl),
-    roughness: 0.34,
+    roughness: 0.3,
     metalness: 0,
-    clearcoat: 0.2,
-    clearcoatRoughness: 0.5,
+    clearcoat: 0.8,
+    clearcoatRoughness: 0.15,
+    sheen: 0.6,
+    sheenColor: color(palette.warm),
+    iridescence: 0.35,
+    iridescenceIOR: 1.3,
+    iridescenceThicknessRange: [250, 500] as [number, number],
   };
 }
 
@@ -184,6 +191,49 @@ const trailFragment = /* glsl */ `
   }
 `;
 
+const sunVertex = /* glsl */ `
+  varying vec3 vNormal;
+  varying vec3 vView;
+  void main() {
+    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+    vNormal = normalize(normalMatrix * normal);
+    vView = normalize(-mv.xyz);
+    gl_Position = projectionMatrix * mv;
+  }
+`;
+
+const sunFragment = /* glsl */ `
+  uniform vec3 uCore;
+  uniform vec3 uRim;
+  uniform float uRimPower;
+  varying vec3 vNormal;
+  varying vec3 vView;
+  void main() {
+    float facing = clamp(dot(normalize(vNormal), normalize(vView)), 0.0, 1.0);
+    gl_FragColor = vec4(mix(uRim, uCore, pow(facing, uRimPower)), 1.0);
+    #include <colorspace_fragment>
+  }
+`;
+
+const haloVertex = trailVertex;
+
+const haloFragment = /* glsl */ `
+  uniform vec3 uColor;
+  uniform vec3 uCore;
+  uniform float uOpacity;
+  uniform float uFalloff;
+  uniform float uInner;
+  varying vec2 vUv;
+  void main() {
+    float d = clamp(length(vUv - 0.5) * 2.0, 0.0, 1.0);
+    float wide = pow(1.0 - d, uFalloff);
+    float tight = pow(1.0 - d, uInner);
+    float glow = clamp(wide * 0.8 + tight * 0.7, 0.0, 1.0);
+    gl_FragColor = vec4(mix(uColor, uCore, tight), glow * uOpacity);
+    #include <colorspace_fragment>
+  }
+`;
+
 function viewFor(variant: Props["variant"], compact: boolean) {
   return compact ? camera.compact : camera[variant];
 }
@@ -201,7 +251,27 @@ function Lanes({ palette, animate, compact, variant, labelTargets }: Props) {
       uLength: { value: trail.length },
       uLead: { value: trail.lead },
       uOpacity: { value: trail.opacity },
-      uColor: { value: color(palette.amber).lerp(color(palette.accent), hero.glowDepth) },
+      uColor: { value: color(palette.sun).lerp(color(palette.warm), trail.warmth) },
+    }),
+    [palette],
+  );
+  const sun = useMemo(() => color(palette.sun), [palette]);
+  const haloMaterial = useRef<ShaderMaterial>(null);
+  const sunUniforms = useMemo(
+    () => ({
+      uCore: { value: color(palette.sun).lerp(new Color(1, 1, 1), hero.coreWhite) },
+      uRim: { value: color(palette.sun).lerp(color(palette.accent), hero.rimWarmth) },
+      uRimPower: { value: hero.rimPower },
+    }),
+    [palette],
+  );
+  const haloUniforms = useMemo(
+    () => ({
+      uColor: { value: color(palette.sun) },
+      uCore: { value: color(palette.sun).lerp(new Color(1, 1, 1), hero.coreWhite) },
+      uOpacity: { value: hero.halo.opacity },
+      uFalloff: { value: hero.halo.falloff },
+      uInner: { value: hero.halo.inner },
     }),
     [palette],
   );
@@ -237,6 +307,13 @@ function Lanes({ palette, animate, compact, variant, labelTargets }: Props) {
     if (u?.uProgress && u.uOpacity) {
       u.uProgress.value = t;
       u.uOpacity.value = trail.opacity * fade;
+    }
+    const halo = haloMaterial.current?.uniforms.uOpacity;
+    if (halo) {
+      const breath = animate
+        ? Math.sin(state.clock.elapsedTime * hero.halo.pulseSpeed) * hero.halo.pulse
+        : 0;
+      halo.value = hero.halo.opacity * (1 + breath);
     }
     if (sculpture.current && animate && !compact) {
       sculpture.current.position.x = MathUtils.damp(
@@ -277,12 +354,29 @@ function Lanes({ palette, animate, compact, variant, labelTargets }: Props) {
         />
       </Environment>
       <group ref={sculpture} scale={view.scale} position={[0, view.baseY, 0]}>
-        {visible.map(({ lane, index, curve }) => (
-          <mesh key={index}>
-            <tubeGeometry args={[curve, segments, lane.radius, 12, false]} />
-            <meshPhysicalMaterial {...cableFinish(lane.finish, palette, compact)} />
-          </mesh>
-        ))}
+        {visible.map(({ lane, index, curve }) =>
+          curve ? (
+            <group key={index}>
+              <mesh>
+                <tubeGeometry args={[curve, segments, lane.radius, 12, false]} />
+                <meshPhysicalMaterial {...cableFinish(lane.finish, palette, compact)} />
+              </mesh>
+              {lane.finish === "glass" && (
+                <LaneFilament curve={curve} radius={lane.radius} segments={segments} sun={sun} />
+              )}
+              {index !== heroLane && (
+                <LanePulse
+                  curve={curve}
+                  radius={lane.radius}
+                  index={index}
+                  segments={segments}
+                  sun={sun}
+                  animate={animate}
+                />
+              )}
+            </group>
+          ) : null,
+        )}
         {visibleBeads.map((bead) => (
           <mesh key={`${bead.lane}-${bead.t}`} position={laneCurves[bead.lane]?.getPointAt(bead.t)}>
             <sphereGeometry args={[bead.radius, 40, 24]} />
@@ -310,23 +404,31 @@ function Lanes({ palette, animate, compact, variant, labelTargets }: Props) {
         </mesh>
         <mesh ref={pearl} position={heroCurve?.getPointAt(START)}>
           <sphereGeometry args={[mobilityConfig.heroRadius, compact ? 32 : 48, 32]} />
-          <meshPhysicalMaterial
-            color={color(palette.amber).multiplyScalar(hero.depth)}
-            roughness={hero.roughness}
-            metalness={hero.metalness}
-            clearcoat={hero.clearcoat}
-            clearcoatRoughness={hero.clearcoatRoughness}
-            iridescence={hero.iridescence}
-            iridescenceIOR={hero.iridescenceIOR}
-            iridescenceThicknessRange={hero.iridescenceThicknessRange}
-            sheen={hero.sheen}
-            sheenColor={color(palette.warm)}
-            emissive={color(palette.amber).lerp(color(palette.accent), hero.glowDepth)}
-            emissiveIntensity={hero.emissiveIntensity}
-            toneMapped={false}
+          <shaderMaterial
+            uniforms={sunUniforms}
+            vertexShader={sunVertex}
+            fragmentShader={sunFragment}
           />
+          <Billboard>
+            <mesh renderOrder={3}>
+              <planeGeometry
+                args={[
+                  mobilityConfig.heroRadius * hero.halo.scale * 2,
+                  mobilityConfig.heroRadius * hero.halo.scale * 2,
+                ]}
+              />
+              <shaderMaterial
+                ref={haloMaterial}
+                transparent
+                depthWrite={false}
+                uniforms={haloUniforms}
+                vertexShader={haloVertex}
+                fragmentShader={haloFragment}
+              />
+            </mesh>
+          </Billboard>
           <pointLight
-            color={color(palette.amber)}
+            color={color(palette.sun)}
             intensity={hero.light.intensity}
             distance={hero.light.distance}
             decay={hero.light.decay}

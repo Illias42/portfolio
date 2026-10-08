@@ -60,6 +60,7 @@ export function MobilityCanvas({
           metal: cssColorRgb("--color-graphite-metal"),
           glass: cssColorRgb("--color-smoked-glass"),
           amber: cssColorRgb("--color-signal"),
+          sun: cssColorRgb("--color-sun"),
           accent: cssColorRgb("--color-accent"),
           warm: cssColorRgb("--color-warm"),
           fill: cssColorRgb("--color-haze"),

@@ -105,7 +105,19 @@ export const networkConfig = {
     ambient: 0.28,
     environment: 0.85,
   },
-  ceramic: { roughness: 0.24, clearcoat: 0.8, clearcoatRoughness: 0.2, bumpScale: 0.001 },
+  pearl: {
+    roughness: 0.42,
+    clearcoat: 1,
+    clearcoatRoughness: 0.06,
+    sheen: 1,
+    sheenRoughness: 0.45,
+    iridescence: 1,
+    iridescenceIOR: 1.6,
+    iridescenceThicknessRange: [280, 640] as [number, number],
+    envMapIntensity: 0.7,
+    bumpScale: 0.0006,
+  },
+
   metal: { metalness: 0.58, roughness: 0.22, envMapIntensity: 0.85 },
   water: {
     extent: [2.5, 2.1] as const,

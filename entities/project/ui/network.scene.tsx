@@ -38,6 +38,8 @@ import { WaterSim } from "../lib/water-sim";
 export interface NetworkPalette {
   ivory: Rgb01;
   ceramic: Rgb01;
+  nacre: Rgb01;
+  rose: Rgb01;
   glass: Rgb01;
   metal: Rgb01;
   graphite: Rgb01;
@@ -75,7 +77,7 @@ const {
   parallax,
   water,
 } = networkConfig;
-const { floatMotion, ceramic: ceramicConfig, metal: metalConfig } = networkConfig;
+const { floatMotion, pearl: pearlConfig, metal: metalConfig } = networkConfig;
 const light = new Vector3(...networkConfig.lighting.key.position).normalize();
 const eye = new Vector3();
 const raycaster = new Raycaster();
@@ -184,18 +186,22 @@ function createGrainTexture(size = 128): DataTexture {
   return texture;
 }
 
-function createCeramic(palette: NetworkPalette, grain: Texture) {
+function createPearl(palette: NetworkPalette, grain: Texture) {
   return new MeshPhysicalMaterial({
-    color: toColor(palette.ceramic).lerp(new Color(1, 1, 1), 0.3),
-    roughness: ceramicConfig.roughness,
-    metalness: 0.12,
-    iridescence: 0.28,
-    iridescenceIOR: 1.3,
-    iridescenceThicknessRange: [220, 340],
-    clearcoat: ceramicConfig.clearcoat,
-    clearcoatRoughness: ceramicConfig.clearcoatRoughness,
+    color: toColor(palette.nacre),
+    metalness: 0,
+    roughness: pearlConfig.roughness,
+    clearcoat: pearlConfig.clearcoat,
+    clearcoatRoughness: pearlConfig.clearcoatRoughness,
+    sheen: pearlConfig.sheen,
+    sheenRoughness: pearlConfig.sheenRoughness,
+    sheenColor: toColor(palette.rose),
+    iridescence: pearlConfig.iridescence,
+    iridescenceIOR: pearlConfig.iridescenceIOR,
+    iridescenceThicknessRange: pearlConfig.iridescenceThicknessRange,
+    envMapIntensity: pearlConfig.envMapIntensity,
     bumpMap: grain,
-    bumpScale: ceramicConfig.bumpScale,
+    bumpScale: pearlConfig.bumpScale,
   });
 }
 
@@ -336,18 +342,7 @@ function Network({
   const nodeMaterials = useMemo(
     () =>
       nodes.map((node, index) => {
-        if (index === 0) {
-          return new MeshPhysicalMaterial({
-            color: toColor(palette.ivory),
-            metalness: 0,
-            roughness: 0.5,
-            clearcoat: 0.18,
-            clearcoatRoughness: 0.45,
-            envMapIntensity: 0.65,
-            bumpMap: grain,
-            bumpScale: 0.0006,
-          });
-        }
+        if (index === 0) return createPearl(palette, grain);
         if (index === 5 || index === 8) {
           return new MeshStandardMaterial({
             color: toColor(palette.metal).lerp(toColor(palette.ceramic), 0.4),
@@ -368,7 +363,7 @@ function Network({
             clearcoatRoughness: 0.08,
           });
         }
-        if (node.finish === "ceramic") return createCeramic(palette, grain);
+        if (node.finish === "ceramic") return createPearl(palette, grain);
         if (node.finish === "metal") return createMetal(palette);
         const variant = glassVariants[node.variant ?? 0] ?? glassVariants[0];
         return createGlass(palette, variant ?? { roughness: 0.1, tint: 0.3, thickness: 0.8 });
