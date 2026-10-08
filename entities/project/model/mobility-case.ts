@@ -6,80 +6,66 @@ export const mobilityCase: CaseStudyContent = {
     {
       number: "01",
       title: "Overview",
-      lead: "Modernizing a real-time ride-hailing backend.",
+      lead: "A live taxi service running on a legacy backend that had stopped keeping up.",
       paragraphs: [
-        "I worked on the modernization of a legacy taxi ride-hailing backend, leading an event-driven refactor and introducing a Node.js WebSocket layer for live ride tracking.",
+        "I led the event-driven refactor of the ride-hailing backend and built a Node.js WebSocket layer for live ride tracking. The goal was not one more feature. It was a backend the team could build on again.",
       ],
     },
     {
       number: "02",
-      title: "The problem",
-      lead: "A legacy system slowing down product development.",
-      paragraphs: [
-        "Too much engineering time was being spent reacting to production issues instead of building new product functionality. The existing backend had become difficult to evolve reliably.",
-        "The challenge went beyond adding live tracking. The system needed clearer real-time behavior that could support ongoing development.",
+      title: "The hard part",
+      lead: "The team spent its time reacting to production instead of building the product.",
+      bullets: [
+        "The legacy backend was hard to change safely, so every change carried risk and incidents took over the roadmap.",
+        "Ride hailing is real-time by nature: a ride moves through states, and riders and drivers expect to see each change as it happens.",
+        "The service was live, so it had to be improved while it kept running, not replaced in one big rewrite.",
       ],
     },
     {
       number: "03",
-      title: "The approach",
-      lead: "Moving toward event-driven flows.",
-      paragraphs: [
-        "I led a refactor of the backend toward an event-driven model and added a Node.js WebSocket layer to deliver live ride-tracking updates to connected clients.",
-        "The flow below is a conceptual explanation of real-time updates, rather than an inventory of internal architecture components.",
-      ],
+      title: "System",
+      lead: "Each ride state change becomes an event, and the WebSocket layer pushes it to the apps.",
       system: [
-        { label: "Ride state", items: ["A ride changes state"] },
-        { label: "Backend event", items: ["The backend handles the change"] },
-        { label: "WebSocket layer", items: ["Node.js delivers the update"] },
-        { label: "Real-time update", items: ["Live tracking information"] },
-        { label: "Client", items: ["Connected clients receive the update"] },
+        { label: "Ride", items: ["State changes as the trip progresses"] },
+        { label: "Backend · NestJS", items: ["Handles the change and emits an event"] },
+        { label: "WebSocket layer · Node.js", items: ["Pushes the update to subscribers"] },
+        { label: "Apps", items: ["Live ride tracking"] },
       ],
     },
     {
       number: "04",
-      title: "What I built",
-      lead: "My contribution.",
+      title: "Engineering decisions",
       decisions: [
         {
-          title: "Event-driven refactor",
-          body: "Led the modernization of the legacy backend toward event-driven flows, making its real-time behavior easier to reason about and extend.",
+          title: "Events instead of chained calls",
+          body: "A ride state change is emitted once and the parts that care react to it. New behavior attaches as a new consumer instead of another edit to a fragile core flow.",
         },
         {
-          title: "Real-time tracking",
-          body: "Added a Node.js WebSocket layer enabling live ride tracking and real-time communication with connected clients.",
+          title: "Push, not poll",
+          body: "Clients hold a WebSocket and receive updates the moment they happen, instead of repeatedly asking the API whether anything changed.",
         },
         {
-          title: "Production stabilization",
-          body: "Worked through legacy backend constraints and recurring production issues as part of the modernization.",
+          title: "Real-time as its own layer",
+          body: "Long-lived connections live in a dedicated Node.js WebSocket layer, apart from the request handling that runs the business logic.",
         },
         {
-          title: "System ownership",
-          body: "Worked across architecture and implementation, treating tracking as part of the backend system.",
+          title: "Refactor, not rewrite",
+          body: "The backend moved to event-driven flows step by step, so the production service kept running throughout.",
         },
       ],
     },
     {
       number: "05",
-      title: "Engineering decision",
-      lead: "Real-time as part of the architecture.",
+      title: "Impact",
+      highlight: "From firefighting to shipping.",
       paragraphs: [
-        "Ride-state changes needed a path through the backend that could reach connected clients as they happened.",
-        "Event-driven flows and a WebSocket layer created that path while supporting the modernization of the surrounding legacy system.",
+        "The team's time moved from fixing recurring legacy issues back to shipping product features, with live ride tracking built into the backend rather than bolted on.",
       ],
     },
     {
       number: "06",
-      title: "Impact",
-      highlight: "From firefighting to forward motion.",
-      paragraphs: [
-        "The modernization helped shift the team's engineering work away from repeatedly firefighting legacy backend issues and toward shipping new product features.",
-      ],
-    },
-    {
-      number: "07",
-      title: "Technology",
-      stack: ["Node.js", "NestJS", "WebSockets"],
+      title: "Stack",
+      stack: ["Node.js", "TypeScript", "NestJS", "WebSockets"],
     },
   ],
 };

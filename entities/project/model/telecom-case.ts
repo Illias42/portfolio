@@ -6,25 +6,27 @@ export const telecomCase: CaseStudyContent = {
     {
       number: "01",
       title: "Overview",
+      lead: "The backend of a telecom product used by around one million people: eSIMs, phone numbers, calls and VPN.",
       paragraphs: [
-        "A telecom platform serving approximately one million users: eSIM and phone-number provisioning, voice calls and VPN, plus self-service for business customers.",
-        "I joined as the second backend engineer, ran the backend solo for a period, and later worked alongside another developer. The backend is built with NestJS and runs on GCP Cloud Run, with Asterisk handling calls.",
+        "I joined as the second backend engineer, ran the backend on my own for a period, and later shared it with one other developer. Over that time I designed and shipped the services for eSIM and number provisioning, call routing, VPN and business self-service.",
+        "The backend is NestJS on GCP Cloud Run. Calls run through Asterisk and external SIP/VoIP providers.",
       ],
     },
     {
       number: "02",
-      title: "The problem",
-      lead: "Most of the product depends on external carrier and provider APIs that are slow and do not always respond reliably.",
+      title: "The hard part",
+      lead: "Almost everything the product sells depends on someone else's API, and those APIs are slow and unreliable.",
       bullets: [
-        "Provisioning an eSIM or a phone number means calling a provider whose request can time out, fail halfway or succeed late.",
-        "A retried request must not create a second eSIM, number or charge for the same order.",
-        "Business customers need to change provisioning and track usage without asking the operations team.",
+        "Provisioning an eSIM or a number is a call to an external provider that can time out, fail halfway or succeed after the client has already given up.",
+        "A retry is unavoidable, but it must never create a second eSIM, a second number or a second charge for the same order.",
+        "Calls need long-lived SIP connections, which a request-scoped serverless backend cannot hold.",
+        "Business customers expect to manage provisioning and usage themselves, at any hour, without opening a ticket.",
       ],
     },
     {
       number: "03",
       title: "System",
-      lead: "A NestJS backend on Cloud Run, with Asterisk running calls next to it.",
+      lead: "A stateless NestJS backend on Cloud Run, with Asterisk running calls next to it.",
       system: [
         {
           label: "Clients",
@@ -52,34 +54,34 @@ export const telecomCase: CaseStudyContent = {
     },
     {
       number: "04",
-      title: "What I built",
-      bullets: [
-        "Integrations with eSIM and phone-number providers that survive timeouts, partial failures and retries.",
-        "The Asterisk setup for calls through SIP/VoIP providers, with routing and numbers managed from the backend.",
-        "WireGuard VPN provisioning: issuing keys and configs and managing servers.",
-        "The business self-service dashboard and public API for accounts, provisioning and usage.",
+      title: "Engineering decisions",
+      decisions: [
+        {
+          title: "Idempotent provider calls",
+          body: "Every provider request carries an idempotency key and is safe to retry. A timeout or a duplicated request ends in exactly one eSIM, one number and one charge.",
+        },
+        {
+          title: "Asterisk outside the request path",
+          body: "Call media and SIP sessions live in Asterisk, where long-lived connections belong. The backend owns numbers and routing rules and stays stateless.",
+        },
+        {
+          title: "Serverless for a two-person team",
+          body: "Cloud Run handles scaling and deploys. With one or two backend engineers, every hour not spent on servers went into product.",
+        },
+        {
+          title: "One data store per job",
+          body: "PostgreSQL for accounts, provisioning and billing. Redis for caching, sessions and rate limits. Firestore to push live state to the apps.",
+        },
       ],
     },
     {
       number: "05",
-      title: "Engineering decisions",
-      decisions: [
-        {
-          title: "Backend on Cloud Run",
-          body: "With a team of one or two backend engineers, Cloud Run takes care of scaling and deploys, so there are no servers to run and time goes into features.",
-        },
-        {
-          title: "Asterisk outside the request path",
-          body: "SIP and call media need long-lived connections, which do not fit request-scoped Cloud Run containers. Asterisk handles the calls, and the backend owns numbers and routing configuration.",
-        },
-        {
-          title: "Defensive provider integration",
-          body: "Every provider call is retried with an idempotency key, so a timeout or a duplicated request never produces a second eSIM, number or charge.",
-        },
-        {
-          title: "One data store per job",
-          body: "PostgreSQL holds accounts, provisioning and billing records. Redis handles caching, sessions and rate limits. Firestore pushes real-time state to client apps.",
-        },
+      title: "What I built",
+      bullets: [
+        "eSIM and phone-number provider integrations that survive timeouts, partial failures and retries.",
+        "The Asterisk setup for calls through SIP/VoIP providers, with numbers and routing managed from the backend.",
+        "WireGuard VPN provisioning: key and config issuance and server management.",
+        "The business self-service dashboard and public API for accounts, provisioning and usage.",
       ],
     },
     {
@@ -87,9 +89,9 @@ export const telecomCase: CaseStudyContent = {
       title: "Impact",
       highlight: "~1M users",
       bullets: [
-        "Provisioning, calls and VPN run in production for approximately one million users.",
-        "Business customers make provisioning changes on their own through the dashboard or the API, without involving the operations team.",
-        "A team of one or two backend engineers kept shipping new features with no servers to maintain.",
+        "Provisioning, calls and VPN run in production for about one million users.",
+        "Business customers change provisioning on their own through the dashboard or the API, without the operations team.",
+        "A backend team of one or two kept shipping features with no servers to maintain.",
       ],
     },
     {

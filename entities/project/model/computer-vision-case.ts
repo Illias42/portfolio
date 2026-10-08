@@ -2,99 +2,71 @@ import type { CaseStudyContent } from "./types";
 
 export const computerVisionCase: CaseStudyContent = {
   slug: "computer-vision",
-  summary:
-    "Built mobile and backend components of a computer-vision product that turned roadside fuel-price signage into actionable competitor pricing data for retailers.",
   sections: [
     {
       number: "01",
       title: "Overview",
-      lead: "Turning roadside signs into product data.",
+      lead: "Fuel retailers set prices against competitors whose prices exist only on roadside signs.",
       paragraphs: [
-        "I built mobile and backend components of a computer-vision product that recognized competitor fuel prices from roadside signage.",
-        "The product transformed information captured in the physical world into pricing data that fuel retailers could use for real-time market visibility.",
+        "At Appexoft I built mobile and backend parts of a computer-vision product that reads competitor fuel prices from that signage. I also built the pricing app retailers use to act on the data: monitor competitors and update their own POS prices from a phone.",
       ],
     },
     {
       number: "02",
-      title: "The problem",
-      lead: "Competitor pricing lives in the physical world.",
-      paragraphs: [
-        "For fuel retailers, competitor prices are displayed publicly on roadside signage, but turning that information into useful digital data requires bridging the physical and software worlds.",
-        "The product used computer vision to recognize competitor fuel prices, while the mobile and backend components I worked on made that information usable inside the wider pricing workflow.",
+      title: "The hard part",
+      lead: "Recognition is only half the product. The price has to reach a decision while it is still current.",
+      bullets: [
+        "The input is a photo of a physical sign, so it has to get from the device into the system and become structured price data.",
+        "Competitor data is only worth something if a retailer can act on it right away, not days later in a report.",
+        "The apps ran on iOS and Android with paid subscriptions, and the existing codebases had critical production bugs.",
       ],
     },
     {
       number: "03",
-      title: "The product flow",
-      lead: "From roadside image to pricing workflow.",
-      paragraphs: [
-        "A conceptual product flow, from physical signage to information a retailer can use.",
-      ],
+      title: "Product flow",
+      lead: "From a roadside sign to a new price at the pump.",
       system: [
         { label: "Roadside sign", items: ["Competitor fuel prices"] },
-        { label: "Image capture", items: ["Roadside price information"] },
-        { label: "Computer vision", items: ["Fuel-price recognition"] },
-        { label: "Price data", items: ["Recognized competitor prices"] },
-        { label: "Mobile / backend", items: ["Product and pricing workflows"] },
-        { label: "Retailer", items: ["Competitor-price visibility"] },
+        { label: "Mobile app", items: ["Captures the sign"] },
+        { label: "Computer vision", items: ["Recognizes the prices"] },
+        { label: "Backend · NestJS", items: ["Competitor price data"] },
+        { label: "Pricing app", items: ["Monitor competitors · update POS prices"] },
       ],
     },
     {
       number: "04",
       title: "What I built",
-      lead: "My contribution.",
       decisions: [
         {
-          title: "Mobile product",
-          body: "Built React Native functionality around the computer-vision workflow, bringing recognized competitor pricing into the mobile product.",
+          title: "Recognition pipeline",
+          body: "React Native and Node.js/NestJS components that connect the computer-vision capability to the product, turning recognized signs into competitor price data.",
         },
         {
-          title: "Backend",
-          body: "Built Node.js / NestJS backend components supporting the product and its pricing workflows.",
+          title: "Pricing management app",
+          body: "Real-time competitor price monitoring, plus direct POS price updates from mobile devices, so retailers see a change and respond in the same place.",
         },
         {
-          title: "Pricing workflow",
-          body: "Worked on functionality that gave fuel retailers real-time competitor price visibility and supported direct POS price updates from mobile devices.",
+          title: "Subscriptions with RevenueCat",
+          body: "In-app purchases and subscriptions on iOS and Android through one RevenueCat integration, instead of two separate store billing implementations.",
+        },
+        {
+          title: "Production stabilization",
+          body: "Fixed critical production bugs and refactored legacy mobile and backend code, so new features no longer shipped on top of broken foundations.",
         },
       ],
     },
     {
       number: "05",
-      title: "From recognition to product",
-      lead: "Computer vision is useful when the result goes somewhere.",
+      title: "Impact",
+      highlight: "From the roadside to the POS.",
       paragraphs: [
-        "The recognized pricing data needed to become part of an actual product: available through mobile workflows, connected to backend functionality, and useful to retailers making pricing decisions.",
-        "My work connected the computer-vision capability with the software around it.",
+        "Retailers got real-time visibility into competitor prices and a way to update their own prices directly from a phone.",
       ],
     },
     {
       number: "06",
-      title: "Pricing management",
-      lead: "From competitor data to price updates.",
-      paragraphs: [
-        "I also worked on the pricing-management product used by fuel retailers, including real-time competitor-price monitoring and workflows for updating POS prices directly from mobile devices.",
-      ],
-    },
-    {
-      number: "07",
-      title: "Production work",
-      lead: "Beyond the feature.",
-      paragraphs: [
-        "Alongside new product development, I worked on stabilizing existing mobile and backend codebases by resolving critical production issues and refactoring legacy code.",
-      ],
-    },
-    {
-      number: "08",
-      title: "Technology",
-      stack: ["TypeScript", "React Native", "Node.js", "NestJS"],
-    },
-    {
-      number: "09",
-      title: "Impact",
-      lead: "Physical information, made actionable.",
-      paragraphs: [
-        "The product gave fuel retailers real-time visibility into competitor pricing by turning roadside fuel-price information into data available through the product.",
-      ],
+      title: "Stack",
+      stack: ["TypeScript", "React Native", "Node.js", "NestJS", "RevenueCat"],
     },
   ],
 };

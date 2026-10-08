@@ -2,79 +2,62 @@ import type { CaseStudyContent } from "./types";
 
 export const connectedDevicesCase: CaseStudyContent = {
   slug: "connected-devices",
-  summary:
-    "Built MQTT-based device control through AWS IoT Core, enabling real-time remote management of connected devices.",
   sections: [
     {
       number: "01",
       title: "Overview",
-      lead: "Connecting software to physical devices.",
+      lead: "When the backend sends a command, a physical device somewhere has to act on it.",
       paragraphs: [
-        "I worked on an IoT control system that connected application-level software with physical devices through MQTT and AWS IoT Core.",
-        "The integration enabled real-time remote device management as part of the wider product experience.",
+        "I integrated MQTT-based device control through AWS IoT Core, so connected devices can be managed remotely and in real time from the product.",
       ],
     },
     {
       number: "02",
-      title: "The problem",
-      lead: "Software doesn't stop at the API boundary.",
-      paragraphs: [
-        "Connected hardware uses a different communication model from a conventional request-response application. Commands need to move between software and devices operating remotely.",
-        "For this project, MQTT and AWS IoT Core provided the communication layer for real-time device control.",
+      title: "The hard part",
+      lead: "Devices are not web clients.",
+      bullets: [
+        "Devices are remote and stay connected over long periods. They don't call an API and wait for a response.",
+        "Commands have to reach them in real time, and their state has to flow back to the product.",
+        "A mistake here doesn't just show a wrong screen. It changes how real hardware behaves.",
       ],
     },
     {
       number: "03",
-      title: "The approach",
-      lead: "Event-driven communication between product and device.",
-      paragraphs: [
-        "I integrated MQTT-based device communication through AWS IoT Core, connecting application logic with remote device control and making device operations part of the product's backend workflow.",
-        "This conceptual flow explains the integration; it is not a complete infrastructure diagram.",
-      ],
+      title: "System",
+      lead: "The backend never talks to a device directly. Messages go through AWS IoT Core over MQTT.",
       system: [
-        { label: "Product / application", items: ["Remote device operations"] },
-        { label: "Backend", items: ["Application logic"] },
-        { label: "MQTT", items: ["Device-control messaging"] },
-        { label: "AWS IoT Core", items: ["Connected-device communication"] },
-        { label: "Connected device", items: ["Remote control"] },
+        { label: "Product", items: ["Remote device management"] },
+        { label: "Backend · Node.js", items: ["Device-control logic"] },
+        { label: "AWS IoT Core", items: ["MQTT broker · device connections"] },
+        { label: "Devices", items: ["Receive commands · report back"] },
       ],
     },
     {
       number: "04",
-      title: "What I built",
-      lead: "My contribution.",
+      title: "Engineering decisions",
       decisions: [
         {
-          title: "MQTT integration",
-          body: "Integrated MQTT-based communication for remote device control.",
+          title: "MQTT over HTTP",
+          body: "MQTT is built for devices: lightweight publish/subscribe messaging over persistent connections, so commands reach a device without it having to poll for them.",
         },
         {
-          title: "AWS IoT Core",
-          body: "Connected the application's device-control flow through AWS IoT Core.",
+          title: "A managed broker",
+          body: "AWS IoT Core holds the device connections and the messaging, so the backend stays focused on control logic instead of running broker infrastructure.",
         },
         {
-          title: "Product integration",
-          body: "Worked across the software layer needed to make remote device operations part of the wider product experience.",
+          title: "Devices as part of the product",
+          body: "Device control runs through the same backend as the rest of the product, so remote operations are product features, not a separate tool.",
         },
       ],
     },
     {
       number: "05",
-      title: "Engineering perspective",
-      lead: "When the backend reaches into the physical world.",
-      paragraphs: [
-        "The software communicates beyond browsers, mobile apps and other services: its actions ultimately affect physical devices operating remotely.",
-        "MQTT provided the messaging model, while AWS IoT Core connected that communication to the application's device-control flow.",
-      ],
-    },
-    {
-      number: "06",
       title: "Impact",
-      lead: "Remote control, in real time.",
+      highlight: "Remote control, in real time.",
       paragraphs: [
-        "The integration enabled connected devices to be managed remotely through the product using MQTT-based communication and AWS IoT Core.",
+        "Connected devices are managed remotely through the product, with commands delivered in real time over MQTT and AWS IoT Core.",
       ],
     },
-    { number: "07", title: "Technology", stack: ["MQTT", "AWS IoT Core", "Node.js"] },
+    { number: "06", title: "Stack", stack: ["Node.js", "TypeScript", "MQTT", "AWS IoT Core"] },
   ],
 };
