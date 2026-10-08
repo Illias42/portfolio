@@ -48,7 +48,7 @@ export const siteConfig = {
   email: "mailto:illiakryvoshchenkov@gmail.com",
   linkedin: "https://www.linkedin.com/in/illia-kryvoshchenkov/",
   github: "https://github.com/Illias42",
-  cv: "/documents/illia-kryvoshchenkov-cv.pdf",
+  cv: "/documents/Illia_Kryvoshchenkov_Full_Stack_Engineer.pdf",
 };
 
 export function absoluteUrl(path: string): string {
